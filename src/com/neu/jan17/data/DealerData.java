@@ -4,14 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.TreeSet;
 
 // Read Dealers Info from Dealers.txt
 public class DealerData {
 
-    private TreeSet<String> sortedDealerInfo = new TreeSet<String>();
-    private Dealer[] dealers;
+    private final TreeSet<String> sortedDealerInfo = new TreeSet<String>();
 
     // Read data from file
     private void DealersReader() {
@@ -33,7 +31,7 @@ public class DealerData {
     public Dealer[] getDealersData() {
         this.DealersReader();
         String[][] data = new String[sortedDealerInfo.size()][3];
-        dealers = new Dealer[sortedDealerInfo.size()];
+        Dealer[] dealers = new Dealer[sortedDealerInfo.size()];
         int i = 0;
         for (String s : sortedDealerInfo) {
             data[i] = s.split("\\s+");
