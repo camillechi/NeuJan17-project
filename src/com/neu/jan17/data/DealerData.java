@@ -7,11 +7,13 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.TreeSet;
 
+// Read Dealers Info from Dealers.txt
 public class DealerData {
 
     private TreeSet<String> sortedDealerInfo = new TreeSet<String>();
     private Dealer[] dealers;
 
+    // Read data from file
     private void DealersReader() {
         try {
             URL pathUrl = getClass().getResource("dealers.txt");
@@ -26,7 +28,8 @@ public class DealerData {
             ex.printStackTrace();
         }
     }
-
+    
+    // Store Info in the Dealer Object
     public Dealer[] getDealersData() {
         this.DealersReader();
         String[][] data = new String[sortedDealerInfo.size()][3];
