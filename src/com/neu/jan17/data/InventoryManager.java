@@ -102,9 +102,9 @@ public class InventoryManager implements InventoryManagerInterface {
     /**
      * Get a vehicle from a collection by vehicle id
      *
-     * @param vehicles
-     * @param vehicle
-     * @return
+     * @param vehicles collection of vehicles
+     * @param vehicle vehicle object
+     * @return returns a vehicle
      */
     private Vehicle getVehicleById(Collection<Vehicle> vehicles, Vehicle vehicle) {
         for (Vehicle vehicle_ : vehicles) {
@@ -124,7 +124,7 @@ public class InventoryManager implements InventoryManagerInterface {
         String vehicleDetails = "id~webId~category~year~make~model~trim~type~price\n";
         StringBuilder stringBuilder = new StringBuilder();
         for (Vehicle vehicle : vehicles) {
-            stringBuilder.append(vehicle.toString()+"\n") ;
+            stringBuilder.append(vehicle.toString()).append("\n");
         }
 
         vehicleDetails = vehicleDetails+ stringBuilder.toString();
@@ -133,6 +133,12 @@ public class InventoryManager implements InventoryManagerInterface {
         Util.writeToFile(inventoryFilePath, vehicleDetails,false);
     }
 
-
+    /**
+     *
+     * @return map of the whole inventory
+     */
+    public Map<String, Inventory> getInventoryMap() {
+        return inventoryMap;
+    }
 
 }

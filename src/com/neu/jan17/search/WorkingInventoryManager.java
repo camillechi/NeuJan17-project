@@ -3,10 +3,7 @@ package com.neu.jan17.search;
 import java.io.*;
 import java.util.*;
 
-import com.neu.jan17.data.Category;
-import com.neu.jan17.data.Inventory;
-import com.neu.jan17.data.InventoryManager;
-import com.neu.jan17.data.Vehicle;
+import com.neu.jan17.data.*;
 
 /**
  * Class that implements InventoryManager and provides methods to read and modify inventory information
