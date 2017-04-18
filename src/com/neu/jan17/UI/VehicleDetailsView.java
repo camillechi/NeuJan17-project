@@ -7,8 +7,6 @@ import java.awt.*;
 public class VehicleDetailsView extends VehicleDetailsViewerData{
 
 
-
-
     public VehicleDetailsView(){
         setUIFont(new FontUIResource("Arial",Font.PLAIN,20));
         createFrame();
@@ -26,7 +24,7 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
         modelLabel = new JLabel("MODEL :");
         bodyTypeLabel = new JLabel("BODY TYPE :");
         dealerIDLabel = new JLabel("DEALER ID :");
-        dealerNameLabel = new JLabel("NAME :");
+        dealerLocationLabel = new JLabel("LOCATION :");
         dealerURLLabel = new JLabel("URL :");
 
         dealerInformationLabel = new JLabel("DEALER INFORMATION");
@@ -114,8 +112,8 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
         JPanel dealerPanel = new JPanel(new GridLayout(0,2));
         dealerPanel.setBackground(Color.white);
         dealerPanel.setPreferredSize(new Dimension(1700, 200));
-        dealerPanel.add(dealerNameLabel);
         dealerPanel.add(dealerIDLabel);
+        dealerPanel.add(dealerLocationLabel);
         dealerPanel.add(dealerURLLabel);
 
         JPanel dealerFinalPanel = new JPanel(new BorderLayout());

@@ -25,7 +25,7 @@ public class InventoryManagerExample {
 
         Dealer dealer = new Dealer();
         dealer.setId("gmps-aj-dohmann");
-        dealer.setName("aj-dohmann");
+        dealer.setLocation("En-US");
         try {
             inventoryManager.addVehicleToInventory(dealer, vehicle);
         } catch (IllegalArgumentException e) {

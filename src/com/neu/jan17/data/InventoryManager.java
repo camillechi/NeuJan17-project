@@ -24,7 +24,7 @@ public class InventoryManager implements InventoryManagerInterface {
         File folder = new File(folderPath);
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.isFile()) {
-                if (!fileEntry.getName().equals("dealers")) {
+                if (fileEntry.getName().contains("gmps")) {
                     Inventory inventory = getInventoryFromFile(fileEntry);
                     inventoryMap.put(inventory.getDealerId(), inventory);
                     dealerFolderPathMap.put(fileEntry.getName(),fileEntry.getAbsolutePath());
@@ -88,7 +88,7 @@ public class InventoryManager implements InventoryManagerInterface {
             targetVehicles.remove(vehicle);
         } else {
             throw new IllegalArgumentException(
-                    String.format("Can not find the vehicle [%s] of dealer [%s]: ", vehicle.getId(), dealer.getName()));
+                    String.format("Can not find the vehicle [%s] of dealer [%s]: ", vehicle.getId(), dealer.getId()));
         }
     }
 

@@ -34,7 +34,7 @@ public class VehicleDetailsController {
         view.setBodyTypeLabel("BODY TYPE : "+ vehicle.getBodyType());
         view.setModelLabel("MODEL : "+ vehicle.getModel());
         view.setPriceLabel("PRICE : "+vehicle.getPrice() );
-        view.setDealerNameLabel("NAME : " + dealer.getName());
+        view.setDealerLocationLabel("LOCATION : " + dealer.getLocation());
         view.setDealerIDLabel("DEALER ID : "+ dealer.getId());
         view.setDealerURLLabel("URL : "+dealer.getUrl());
 
