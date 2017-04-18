@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+// UI for Main Page
 public class MainPage extends JFrame implements ActionListener {
     private JTextField title;
     private JButton customerButton;
@@ -13,6 +14,7 @@ public class MainPage extends JFrame implements ActionListener {
     private JPanel MainPage = new JPanel();
     private DealerInfoTable dealerInfoTable = new DealerInfoTable();
 
+    // Initiate the Main Page
     public MainPage() {
         dealerInfoTable.setVisible(false);
         setLayout(new BorderLayout());
