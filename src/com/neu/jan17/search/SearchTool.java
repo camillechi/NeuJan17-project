@@ -7,12 +7,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.neu.jan17.data.Inventory;
+import com.neu.jan17.data.InventoryManager;
 import com.neu.jan17.data.Vehicle;
 
 public class SearchTool implements SearchFunc {
 		
-	private List<ItemVehicle> data;
-	private List<ItemVehicle> result;
+	private List<Vehicle> data;
+	private List<Vehicle> result;
 	
 	/**
      * Create a searching helper
@@ -20,10 +21,10 @@ public class SearchTool implements SearchFunc {
      * @param folderPath	the path that has all data files   
      */
 	public SearchTool(String folderPath) throws FileNotFoundException {
-		WorkingInventoryManager reader = new WorkingInventoryManager(folderPath);
-		Map<String, Inventory> vehicleMap = reader.getAllVehicles();
+		InventoryManager reader = new InventoryManager(folderPath);
+		Map<String, Inventory> vehicleMap = reader.getInventoryMap();
 		
-		data = new ArrayList<ItemVehicle>();
+		data = new ArrayList<Vehicle>();
 		
 		flatMapToList(vehicleMap, data);
 		
@@ -32,7 +33,7 @@ public class SearchTool implements SearchFunc {
 	
 
 	@Override
-	public boolean searchByKeyWord(List<ItemVehicle> base, String kw) {
+	public boolean searchByKeyWord(List<Vehicle> base, String kw) {
 		result = base.stream().filter(v -> matchKeyWord(v, kw.toLowerCase())).collect(Collectors.toList());
 		return result.size() > 0;
 	}
@@ -43,7 +44,7 @@ public class SearchTool implements SearchFunc {
 	}
 
 	@Override
-	public boolean searchByFilters(List<ItemVehicle> base, List<Filter> filters) {
+	public boolean searchByFilters(List<Vehicle> base, List<Filter> filters) {
 		result = base.stream().filter(v -> matchFilters(v, filters)).collect(Collectors.toList());
 		return result.size() > 0;
 	}
@@ -54,35 +55,35 @@ public class SearchTool implements SearchFunc {
 	}
 
 	@Override
-	public List<ItemVehicle> getData() {
+	public List<Vehicle> getData() {
 		return data;
 	}
 
 	@Override
-	public List<ItemVehicle> getResult() {
-		return result == null ? new ArrayList<ItemVehicle>() : result;
+	public List<Vehicle> getResult() {
+		return result == null ? new ArrayList<Vehicle>() : result;
 	}
 
 	@Override
-	public List<ItemVehicle> getResult(int pageIndex, int itemsPerPage) {
+	public List<Vehicle> getResult(int pageIndex, int itemsPerPage) {
 		int bIdx = pageIndex*itemsPerPage, eIdx = bIdx+itemsPerPage, len = result == null ? 0 : result.size();
-		if(bIdx > len - 1) return new ArrayList<ItemVehicle>();
+		if(bIdx > len - 1) return new ArrayList<Vehicle>();
 		return result.subList(bIdx, Math.min(len, eIdx));
 	}
 	
 	
-	private boolean matchKeyWord(ItemVehicle v, String kw) {
-		return v.getMake().indexOf(kw) >= 0 || v.getModel().indexOf(kw) >= 0 || v.getBodyType().indexOf(kw) >= 0 || v.getDealerId().indexOf(kw) >= 0;
+	private boolean matchKeyWord(Vehicle v, String kw) {
+		return v.getMake().indexOf(kw) >= 0 || v.getModel().indexOf(kw) >= 0 || v.getBodyType().indexOf(kw) >= 0 || v.getWebId().indexOf(kw) >= 0;
 	}
 	
-	private boolean matchFilters(ItemVehicle v, List<Filter> filters) {
+	private boolean matchFilters(Vehicle v, List<Filter> filters) {
 		return filters.stream().map((f) -> f.matchVehicle(v)).reduce(true, (x, y) -> (x && y));
 	}
 	
-	private void flatMapToList(Map<String, Inventory> vehicleMap, List<ItemVehicle> data) {
+	private void flatMapToList(Map<String, Inventory> vehicleMap, List<Vehicle> data) {
 		for (Inventory inventory : vehicleMap.values()) {
 		    for(Vehicle v : inventory.getVehicles()) {
-		    	data.add(new ItemVehicle(v.getId(), v.getYear(), v.getMake(), v.getModel(), v.getTrim(), v.getCategory(), v.getBodyType(), v.getPrice(), inventory.getDealerId()));
+		    	data.add(v);
 		    }
 		}
 	}

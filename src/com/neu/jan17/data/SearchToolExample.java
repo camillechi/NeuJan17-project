@@ -20,15 +20,15 @@ public class SearchToolExample {
 				int itemPerPage = 50;
 							
 				//get the first page of results
-				List<ItemVehicle> first50Items = s.getResult(0, itemPerPage); // A ItemVehicle is just a Vehicle with an extra field "dealeId". You can treat it as a Vehicle
+				List<Vehicle> first50Items = s.getResult(0, itemPerPage); 
 				System.out.println(first50Items.size() + " items found.");
 				
 				//get the second page
-				List<ItemVehicle> second50Items = s.getResult(1, itemPerPage);
+				List<Vehicle> second50Items = s.getResult(1, itemPerPage);
 				System.out.println(second50Items.size() + " items found.");
 				
 				//get all results
-				List<ItemVehicle> allResults = s.getResult();
+				List<Vehicle> allResults = s.getResult();
 				System.out.println(allResults.size() + " items found.");
 			}
 			
@@ -47,7 +47,7 @@ public class SearchToolExample {
 			//search for vehicles that are selling by dealer dohmann with year range of [2005, 2012) (2012 excluded)
 			if(s.searchByFilters(filters)) {
 				//get all results
-				List<ItemVehicle> vehiclesListedByDealerDohmannWithYearRangeOf2005to2012 = s.getResult();
+				List<Vehicle> vehiclesListedByDealerDohmannWithYearRangeOf2005to2012 = s.getResult();
 				System.out.println(vehiclesListedByDealerDohmannWithYearRangeOf2005to2012.size() + " items found.");
 			}	
 		} catch(FileNotFoundException e) {

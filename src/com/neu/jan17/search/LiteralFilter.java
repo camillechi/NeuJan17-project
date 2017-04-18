@@ -1,5 +1,7 @@
 package com.neu.jan17.search;
 
+import com.neu.jan17.data.Vehicle;
+
 public class LiteralFilter extends Filter {
 	private Object value;
 	
@@ -15,8 +17,8 @@ public class LiteralFilter extends Filter {
 	}
 	
 	@Override
-	boolean matchVehicle(ItemVehicle v) {
-		return v.get(getName()).equals(value);
+	boolean matchVehicle(Vehicle v) {
+		return get(getName(), v).equals(value);
 	}
 
 }

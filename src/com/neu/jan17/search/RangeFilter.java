@@ -1,5 +1,7 @@
 package com.neu.jan17.search;
 
+import com.neu.jan17.data.Vehicle;
+
 public class RangeFilter extends Filter {
 	private Comparable start, end;
 	
@@ -17,8 +19,8 @@ public class RangeFilter extends Filter {
 	}
 	
 	@Override
-	boolean matchVehicle(ItemVehicle v) {
-		Comparable val = (Comparable)v.get(getName());
+	boolean matchVehicle(Vehicle v) {
+		Comparable val = (Comparable)get(getName(), v);
 		boolean matched;
 		try {
 			matched = val.compareTo(start) >= 0 && val.compareTo(end) < 0;

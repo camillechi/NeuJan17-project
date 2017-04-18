@@ -2,6 +2,8 @@ package com.neu.jan17.search;
 
 import java.util.List;
 
+import com.neu.jan17.data.Vehicle;
+
 
 public interface SearchFunc {
 	/**
@@ -20,7 +22,7 @@ public interface SearchFunc {
      * @param kw	keyword
      * @return		false if nothing found, else true
      */
-	public boolean searchByKeyWord(List<ItemVehicle> base, String kw);
+	public boolean searchByKeyWord(List<Vehicle> base, String kw);
 	
 	
 	/**
@@ -39,7 +41,7 @@ public interface SearchFunc {
      * @param filters	a list of filters
      * @return			false if nothing found, else true
      */
-	public boolean searchByFilters(List<ItemVehicle> base, List<Filter> filters);
+	public boolean searchByFilters(List<Vehicle> base, List<Filter> filters);
 	
 	
 	/**
@@ -48,7 +50,7 @@ public interface SearchFunc {
      * @param     
      * @return    a list of vehicle items
      */
-	public List<ItemVehicle> getData();
+	public List<Vehicle> getData();
 	
 	/**
      * Get all searching results
@@ -56,7 +58,7 @@ public interface SearchFunc {
      * @param     
      * @return    a list of vehicle items
      */
-	public List<ItemVehicle> getResult();
+	public List<Vehicle> getResult();
 	
 	
 	/**
@@ -66,5 +68,5 @@ public interface SearchFunc {
      * @param itemsPerPage	number of item in one page
      * @return    a list of vehicle items
      */
-	public List<ItemVehicle> getResult(int pageIndex, int itemsPerPage);
+	public List<Vehicle> getResult(int pageIndex, int itemsPerPage);
 }
