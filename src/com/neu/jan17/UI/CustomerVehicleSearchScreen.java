@@ -199,7 +199,7 @@ public class CustomerVehicleSearchScreen extends JFrame implements CustomerVehic
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//call the previous screen class
+				new MainPage();
 			}
 			
 		});
