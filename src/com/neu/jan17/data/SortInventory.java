@@ -2,6 +2,7 @@ package com.neu.jan17.data;
 
 import java.util.*;
 
+// Sort function for Inventory
 public class SortInventory {
     ArrayList<Vehicle> arr;
 
