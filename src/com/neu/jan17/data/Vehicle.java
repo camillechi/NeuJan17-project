@@ -113,7 +113,7 @@ public class Vehicle {
 
 	@Override
 	public String toString(){
-		return id + "~" + webId + "~" + category + "~" + year + "~" + make + "~" +
+		return id + "~" + webId + "~" + category.toString().toLowerCase() + "~" + year + "~" + make + "~" +
 				 model + "~" + trim + "~" + bodyType + "~" + price + "~" + photo;
 	}
 }
