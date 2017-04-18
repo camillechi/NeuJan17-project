@@ -24,29 +24,22 @@ import javax.swing.table.TableCellRenderer;
 import com.neu.jan17.data.Dealer;
 import com.neu.jan17.data.DealerData;
 import com.neu.jan17.data.UrlHandle;
-import com.neu.jan17.data.Dealer;
-import com.neu.jan17.data.DealerData;
-import com.neu.jan17.data.UrlHandle;
 
 // Second Page
 // After clicking Dealers Button on the MainPage.
-public class DealerInfoTable extends JFrame implements ActionListener {
+class DealerInfoTable extends JFrame implements ActionListener {
     private JTable table;
-    private JLabel label;
-    private JButton backButton;
-    private JButton manageButton;
     private Dealer dealer = new Dealer();
-    private DealerData dealerData = new DealerData();
-    private UrlHandle urlHandle = new UrlHandle();
+    private final UrlHandle urlHandle = new UrlHandle();
     private JPanel MainPage = new JPanel();
-    private JPanel dealerInfoTable = new JPanel();
-    private MainPage mainPage;
+    private final JPanel dealerInfoTable = new JPanel();
 
 
     public DealerInfoTable() {
         setSize(700, 700);
         setLayout(new FlowLayout());
         String[] columnNames = {"NAME", "LANGUAGE", "URL"};
+        DealerData dealerData = new DealerData();
         Dealer[] dealersInfo = dealerData.getDealersData();
         String[][] dealersInfoArr = new String[dealersInfo.length][3];
         for(int i = 0; i < dealersInfo.length; i++){
@@ -54,11 +47,11 @@ public class DealerInfoTable extends JFrame implements ActionListener {
             dealersInfoArr[i][1] = dealersInfo[i].getLocation();
             dealersInfoArr[i][2] = dealersInfo[i].getUrl();
         }
-        label = new JLabel("You could find the most sutiable dealer for you here!");
+        JLabel label = new JLabel("You could find the most sutiable dealer for you here!");
         table = new JTable();
         table = new JTable(dealersInfoArr, columnNames);
-        backButton = new JButton("Back");
-        manageButton = new JButton("Manage Vehicles");
+        JButton backButton = new JButton("Back");
+        JButton manageButton = new JButton("Manage Vehicles");
 
         backButton.addActionListener(this);
         backButton.setActionCommand("Back");
@@ -104,8 +97,7 @@ public class DealerInfoTable extends JFrame implements ActionListener {
             @Override
             public Component getTableCellRendererComponent(JTable table, final Object value, boolean arg2,
                                                            boolean arg3, int arg4, int arg5) {
-                final JLabel lab = new JLabel("<html><a href=\"" + value + "\">" + value + "</a>");
-                return lab;
+                return new JLabel("<html><a href=\"" + value + "\">" + value + "</a>");
             }
         });
 
@@ -128,7 +120,7 @@ public class DealerInfoTable extends JFrame implements ActionListener {
             // redirect to the main page
             dealerInfoTable.setVisible(false);
             dispose();
-            mainPage = new MainPage();
+            com.neu.jan17.UI.MainPage mainPage = new MainPage();
 
 
         } else if (e.getActionCommand().equals("Manage")) {
