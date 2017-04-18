@@ -7,12 +7,9 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 // UI for Main Page
-public class MainPage extends JFrame implements ActionListener {
-    private JTextField title;
-    private JButton customerButton;
-    private JButton dealerButton;
+class MainPage extends JFrame implements ActionListener {
     private JPanel MainPage = new JPanel();
-    private DealerInfoTable dealerInfoTable = new DealerInfoTable();
+    private final DealerInfoTable dealerInfoTable = new DealerInfoTable();
 
     // Initiate the Main Page
     public MainPage() {
@@ -22,11 +19,11 @@ public class MainPage extends JFrame implements ActionListener {
         JLabel background = new JLabel(new ImageIcon(imgPathUrl.getPath()));
         add(background);
         background.setLayout(new FlowLayout());
-        customerButton = new JButton("Customer");
+        JButton customerButton = new JButton("Customer");
         customerButton.setPreferredSize(new Dimension(100, 50));
-        dealerButton = new JButton("Dealer");
+        JButton dealerButton = new JButton("Dealer");
         dealerButton.setPreferredSize(new Dimension(100,50));
-        title = new JTextField("Vehicle Management");
+        JTextField title = new JTextField("Vehicle Management");
         Font font1 = new Font("SansSerif", Font.BOLD, 20);
         title.setFont(font1);
         title.setEditable(false);
@@ -56,7 +53,7 @@ public class MainPage extends JFrame implements ActionListener {
 
         } else if (e.getActionCommand().equals("Dealers")) {
             // redirect to Dealers Management Page
-            //MainPage.setVisible(false);
+            // MainPage.setVisible(false);
             dispose();
             dealerInfoTable.setVisible(true);
         }
