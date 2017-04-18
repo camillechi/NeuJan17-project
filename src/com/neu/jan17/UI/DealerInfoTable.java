@@ -28,6 +28,8 @@ import com.neu.jan17.data.Dealer;
 import com.neu.jan17.data.DealerData;
 import com.neu.jan17.data.UrlHandle;
 
+// Second Page
+// After clicking Dealers Button on the MainPage.
 public class DealerInfoTable extends JFrame implements ActionListener {
     private JTable table;
     private JLabel label;
