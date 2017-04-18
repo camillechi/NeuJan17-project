@@ -12,6 +12,5 @@ public interface CustomerVehicleSearchInterface {
 	public abstract void setTopPanel();
 	/* Set the layout for the left, right and top panel components
 	 * */
-	public abstract void setLayout();
-	
+	public abstract void setLayout();	
 }
