@@ -4,71 +4,47 @@ import java.util.*;
 
 // Sort function for Inventory
 public class SortInventory {
-    ArrayList<Vehicle> arr;
-
-    public void sortVehiclesByYear(Inventory inventory) {
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, Comparator.comparingInt(Vehicle::getYear));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByYear(List<Vehicle> vehicle) {
+        vehicle.sort(Comparator.comparing(Vehicle::getYear));
     }
 
-    public void sortVehiclesByYearReverse(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, Comparator.comparingInt(Vehicle::getYear).reversed());
-        inventory.setVehicles(arr);
+    public void sortVehiclesByYearReverse(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getYear).reversed());
     }
 
-    public void sortVehiclesByModel(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getModel()).compareTo(o2.getModel()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByModel(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getModel));
     }
 
-    public void sortVehiclesByCategory(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getCategory()).compareTo(o2.getCategory()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByCategory(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getCategory));
     }
 
-    public void sortVehiclesByPrice(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, Comparator.comparingDouble(Vehicle::getPrice));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByPrice(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getPrice));
     }
 
-    public void sortVehiclesByPriceReverse(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, Comparator.comparingDouble(Vehicle::getPrice).reversed());
-        inventory.setVehicles(arr);
+    public void sortVehiclesByPriceReverse(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getPrice).reversed());
     }
 
-    public void sortVehiclesByMake(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getMake()).compareTo(o2.getMake()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByMake(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getMake));
     }
 
-    public void sortVehiclesById(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getId()).compareTo(o2.getId()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesById(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getId));
     }
 
-    public void sortVehiclesByTrim(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getTrim()).compareTo(o2.getTrim()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByTrim(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getTrim));
     }
 
-    public void sortVehiclesByBodyType(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getBodyType()).compareTo(o2.getBodyType()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByBodyType(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getBodyType));
     }
 
-    public void sortVehiclesByWebId(Inventory inventory){
-        arr = new ArrayList<Vehicle>(inventory.getVehicles());
-        Collections.sort(arr, (o1, o2) -> (o1.getWebId()).compareTo(o2.getWebId()));
-        inventory.setVehicles(arr);
+    public void sortVehiclesByWebId(List<Vehicle> vehicle){
+        vehicle.sort(Comparator.comparing(Vehicle::getWebId));
     }
 }
