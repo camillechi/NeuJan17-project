@@ -2,6 +2,7 @@ package com.neu.jan17.UI;
 
 
 import com.neu.jan17.data.Dealer;
+import com.neu.jan17.data.DealerData;
 import com.neu.jan17.data.Vehicle;
 
 public class VehicleDetailsController {
@@ -10,12 +11,29 @@ public class VehicleDetailsController {
     /**
      *
      * @param vehicle is a vehicle object to be displayed
-     * @param dealer is a dealer object to be displayed
      */
-    public  VehicleDetailsController(Vehicle vehicle, Dealer dealer){
+    public  VehicleDetailsController(Vehicle vehicle){
 
-            setDetails(new VehicleDetailsView(),vehicle, dealer);
+        Dealer dealer = getDealer(vehicle.getWebId());
+        setDetails(new VehicleDetailsView(),vehicle, dealer);
 
+    }
+
+    /**
+     *
+     * @param webId uses webId of a vehicle object to get the associated dealer object
+     * @return dealer assigned with the vehicle object
+     */
+    private Dealer getDealer(String webId) {
+
+        DealerData dealerData = new DealerData();
+        Dealer[] dealers = dealerData.getDealersData();
+        for(Dealer dealer : dealers){
+            if(dealer.getId().equals(webId)){
+                return dealer;
+            }
+        }
+        return null;
     }
 
     /**
