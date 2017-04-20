@@ -5,6 +5,8 @@ import com.neu.jan17.data.Dealer;
 import com.neu.jan17.data.DealerData;
 import com.neu.jan17.data.Vehicle;
 
+import javax.swing.*;
+
 public class VehicleDetailsController {
 
 
@@ -15,7 +17,9 @@ public class VehicleDetailsController {
     public  VehicleDetailsController(Vehicle vehicle){
 
         Dealer dealer = getDealer(vehicle.getWebId());
-        setDetails(new VehicleDetailsView(),vehicle, dealer);
+        Runnable runnable = () -> setDetails(new VehicleDetailsView(),vehicle, dealer);
+        SwingUtilities.invokeLater(runnable);
+
 
     }
 
@@ -43,6 +47,7 @@ public class VehicleDetailsController {
      * @param dealer is dealer object to be displaced
      */
     private void setDetails(VehicleDetailsView view, Vehicle vehicle, Dealer dealer){
+
         view.setPictureLabel(vehicle.getPhoto());
         view.setVehicleIDLabel("VEHICLE ID : "+ vehicle.getId() );
         view.setCategoryLabel("CATEGORY : "+ vehicle.getCategory());
