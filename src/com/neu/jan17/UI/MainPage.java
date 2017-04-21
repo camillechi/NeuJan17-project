@@ -63,3 +63,4 @@ class MainPage extends JFrame implements ActionListener {
         MainPage main = new MainPage();
     }
 }
+//End of main page
