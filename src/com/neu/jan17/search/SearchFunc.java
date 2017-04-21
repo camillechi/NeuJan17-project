@@ -12,7 +12,7 @@ public interface SearchFunc {
      * @param kw	keyword
      * @return		false if nothing found, else true
      */
-	public boolean searchByKeyWord(String kw);
+	public SearchResult searchByKeyWord(String kw);
 	
 	
 	/**
@@ -22,7 +22,7 @@ public interface SearchFunc {
      * @param kw	keyword
      * @return		false if nothing found, else true
      */
-	public boolean searchByKeyWord(List<Vehicle> base, String kw);
+	public SearchResult searchByKeyWord(List<Vehicle> base, String kw);
 	
 	
 	/**
@@ -31,7 +31,7 @@ public interface SearchFunc {
      * @param filters	a list of filters
      * @return			false if nothing found, else true
      */
-	public boolean searchByFilters(List<Filter> filters);
+	public SearchResult searchByFilters(List<Filter> filters);
 	
 	
 	/**
@@ -41,7 +41,7 @@ public interface SearchFunc {
      * @param filters	a list of filters
      * @return			false if nothing found, else true
      */
-	public boolean searchByFilters(List<Vehicle> base, List<Filter> filters);
+	public SearchResult searchByFilters(List<Vehicle> base, List<Filter> filters);
 	
 	
 	/**
@@ -52,21 +52,4 @@ public interface SearchFunc {
      */
 	public List<Vehicle> getData();
 	
-	/**
-     * Get all searching results
-     *
-     * @param     
-     * @return    a list of vehicle items
-     */
-	public List<Vehicle> getResult();
-	
-	
-	/**
-     * Get a page of searching results
-     *
-     * @param pageIndex		page number  
-     * @param itemsPerPage	number of item in one page
-     * @return    a list of vehicle items
-     */
-	public List<Vehicle> getResult(int pageIndex, int itemsPerPage);
 }

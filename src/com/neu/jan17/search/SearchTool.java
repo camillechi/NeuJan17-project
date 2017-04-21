@@ -13,7 +13,6 @@ import com.neu.jan17.data.Vehicle;
 public class SearchTool implements SearchFunc {
 		
 	private List<Vehicle> data;
-	private List<Vehicle> result;
 	
 	/**
      * Create a searching helper
@@ -27,30 +26,26 @@ public class SearchTool implements SearchFunc {
 		data = new ArrayList<Vehicle>();
 		
 		flatMapToList(vehicleMap, data);
-		
-		result = null;
 	}
 	
 
 	@Override
-	public boolean searchByKeyWord(List<Vehicle> base, String kw) {
-		result = base.stream().filter(v -> matchKeyWord(v, kw.toLowerCase())).collect(Collectors.toList());
-		return result.size() > 0;
+	public SearchResult searchByKeyWord(List<Vehicle> base, String kw) {
+		return new SearchResult(base.stream().filter(v -> matchKeyWord(v, kw.toLowerCase())).collect(Collectors.toList()));
 	}
 	
 	@Override
-	public boolean searchByKeyWord(String kw) {
+	public SearchResult searchByKeyWord(String kw) {
 		return searchByKeyWord(data, kw);
 	}
 
 	@Override
-	public boolean searchByFilters(List<Vehicle> base, List<Filter> filters) {
-		result = base.stream().filter(v -> matchFilters(v, filters)).collect(Collectors.toList());
-		return result.size() > 0;
+	public SearchResult searchByFilters(List<Vehicle> base, List<Filter> filters) {
+		return new SearchResult(base.stream().filter(v -> matchFilters(v, filters)).collect(Collectors.toList()));
 	}
 	
 	@Override
-	public boolean searchByFilters(List<Filter> filters) {
+	public SearchResult searchByFilters(List<Filter> filters) {
 		return searchByFilters(data, filters);
 	}
 
@@ -58,19 +53,6 @@ public class SearchTool implements SearchFunc {
 	public List<Vehicle> getData() {
 		return data;
 	}
-
-	@Override
-	public List<Vehicle> getResult() {
-		return result == null ? new ArrayList<Vehicle>() : result;
-	}
-
-	@Override
-	public List<Vehicle> getResult(int pageIndex, int itemsPerPage) {
-		int bIdx = pageIndex*itemsPerPage, eIdx = bIdx+itemsPerPage, len = result == null ? 0 : result.size();
-		if(bIdx > len - 1) return new ArrayList<Vehicle>();
-		return result.subList(bIdx, Math.min(len, eIdx));
-	}
-	
 	
 	private boolean matchKeyWord(Vehicle v, String kw) {
 		return v.getMake().indexOf(kw) >= 0 || v.getModel().indexOf(kw) >= 0 || v.getBodyType().indexOf(kw) >= 0 || v.getWebId().indexOf(kw) >= 0;
