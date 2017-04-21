@@ -9,6 +9,11 @@ import java.util.*;
 public class InventoryManager implements InventoryManagerInterface {
     private Map<String , Inventory> inventoryMap = new HashMap<>();
     private Map<String, String> dealerFolderPathMap = new HashMap<>();
+    private Set<String> vehicleMakeItems =  new HashSet<>();
+    private Set<String> vehicleModelItems = new HashSet<>();
+    private Set<Integer> vehicleYearItems = new HashSet<>();
+    private Set<String> vehicleBodyTypeItems = new HashSet<>();
+
 
     public InventoryManager(String dataFolderPath) throws FileNotFoundException {
         this.readInventoryFolder(dataFolderPath);
@@ -24,7 +29,7 @@ public class InventoryManager implements InventoryManagerInterface {
         File folder = new File(folderPath);
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.isFile()) {
-                if (!fileEntry.getName().equals("dealers")) {
+                if (fileEntry.getName().contains("gmps")) {
                     Inventory inventory = getInventoryFromFile(fileEntry);
                     inventoryMap.put(inventory.getDealerId(), inventory);
                     dealerFolderPathMap.put(fileEntry.getName(),fileEntry.getAbsolutePath());
@@ -57,6 +62,10 @@ public class InventoryManager implements InventoryManagerInterface {
                     Integer.parseInt(vehicleInfo[3]),vehicleInfo[4],vehicleInfo[5],vehicleInfo[6],vehicleInfo[7],
                     Float.parseFloat(vehicleInfo[8]),vehicleInfo[9]);
             vehicles.add(v);
+            vehicleMakeItems.add(v.getMake());
+            vehicleModelItems.add(v.getModel());
+            vehicleBodyTypeItems.add(v.getBodyType());
+            vehicleYearItems.add(v.getYear());
         }
         inventory.setDealerId(dealerId);
         inventory.setVehicles(vehicles);
@@ -88,7 +97,7 @@ public class InventoryManager implements InventoryManagerInterface {
             targetVehicles.remove(vehicle);
         } else {
             throw new IllegalArgumentException(
-                    String.format("Can not find the vehicle [%s] of dealer [%s]: ", vehicle.getId(), dealer.getName()));
+                    String.format("Can not find the vehicle [%s] of dealer [%s]: ", vehicle.getId(), dealer.getId()));
         }
     }
 
@@ -140,5 +149,23 @@ public class InventoryManager implements InventoryManagerInterface {
     public Map<String, Inventory> getInventoryMap() {
         return inventoryMap;
     }
+
+
+    public Set<String> getVehicleMakeItems() {
+        return vehicleMakeItems;
+    }
+
+    public Set<String> getVehicleModelItems() {
+        return vehicleModelItems;
+    }
+
+    public Set<Integer> getVehicleYearItems() {
+        return vehicleYearItems;
+    }
+
+    public Set<String> getVehicleBodyTypeItems() {
+        return vehicleBodyTypeItems;
+    }
+
 
 }

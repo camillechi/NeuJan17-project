@@ -8,7 +8,7 @@ public abstract class VehicleDetailsViewerData {
 
     protected JLabel pictureLabel, priceLabel, makeLabel, yearLabel, trimLabel,
             categoryLabel, vehicleIDLabel, modelLabel, bodyTypeLabel,
-            dealerIDLabel, dealerNameLabel, dealerURLLabel,
+            dealerIDLabel, dealerLocationLabel, dealerURLLabel,
             specificationsLabel, dealerInformationLabel;
 
 
@@ -79,13 +79,13 @@ public abstract class VehicleDetailsViewerData {
         try {
             pictureLabel.setIcon(Util.getImageFromUrl(url));
         }catch (Exception e){
-            pictureLabel.setIcon(new ImageIcon("D:\\image.jpg"));
+            pictureLabel.setIcon(new ImageIcon("data\\VehicleDetailsNoImage.jpg"));
         }
 
     }
 
-    public void setDealerNameLabel(String dealerName){
-        dealerNameLabel.setText(dealerName);
+    public void setDealerLocationLabel(String dealerName){
+        dealerLocationLabel.setText(dealerName);
     }
 
     public void setDealerIDLabel(String dealerID){
