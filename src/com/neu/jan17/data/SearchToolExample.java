@@ -15,22 +15,23 @@ public class SearchToolExample {
 			/*----------------------- search by keyword ------------------------*/
 			
 			//search with keyword "dohma"
-			if(s.searchByKeyWord("dohma")) {
-				//50 items per page
-				int itemPerPage = 50;
-							
-				//get the first page of results
-				List<Vehicle> first50Items = s.getResult(0, itemPerPage); 
-				System.out.println(first50Items.size() + " items found.");
-				
-				//get the second page
-				List<Vehicle> second50Items = s.getResult(1, itemPerPage);
-				System.out.println(second50Items.size() + " items found.");
-				
-				//get all results
-				List<Vehicle> allResults = s.getResult();
-				System.out.println(allResults.size() + " items found.");
-			}
+			SearchResult searchResult = s.searchByKeyWord("dohma");
+			
+			//50 items per page
+			int itemPerPage = 50;
+						
+			//get the first page of results
+			List<Vehicle> first50Items = searchResult.getResult(0, itemPerPage); 
+			System.out.println(first50Items.size() + " items found.");
+			
+			//get the second page
+			List<Vehicle> second50Items = searchResult.getResult(1, itemPerPage);
+			System.out.println(second50Items.size() + " items found.");
+			
+			//get all results
+			List<Vehicle> allResults = searchResult.getResult();
+			System.out.println(allResults.size() + " items found.");
+			
 			
 			/*----------------------- search by filters ------------------------*/
 			
@@ -45,11 +46,11 @@ public class SearchToolExample {
 			filters.add(lf);
 			
 			//search for vehicles that are selling by dealer dohmann with year range of [2005, 2012) (2012 excluded)
-			if(s.searchByFilters(filters)) {
-				//get all results
-				List<Vehicle> vehiclesListedByDealerDohmannWithYearRangeOf2005to2012 = s.getResult();
-				System.out.println(vehiclesListedByDealerDohmannWithYearRangeOf2005to2012.size() + " items found.");
-			}	
+			SearchResult searchResult2 = s.searchByFilters(filters);
+			//get all results
+			List<Vehicle> vehiclesListedByDealerDohmannWithYearRangeOf2005to2012 = searchResult2.getResult();
+			System.out.println(vehiclesListedByDealerDohmannWithYearRangeOf2005to2012.size() + " items found.");
+			
 		} catch(FileNotFoundException e) {
 			System.out.println("File does not exist.");
 		}
