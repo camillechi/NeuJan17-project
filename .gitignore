@@ -3,3 +3,5 @@
 NeuJan17-project.iml
 out/
 /bin/
+.classpath
+.project
