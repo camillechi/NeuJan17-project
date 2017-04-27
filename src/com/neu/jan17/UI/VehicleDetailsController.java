@@ -2,10 +2,7 @@ package com.neu.jan17.UI;
 
 
 import com.neu.jan17.data.Dealer;
-import com.neu.jan17.data.DealerData;
 import com.neu.jan17.data.Vehicle;
-
-import javax.swing.*;
 
 public class VehicleDetailsController {
 
@@ -14,30 +11,13 @@ public class VehicleDetailsController {
      *
      * @param vehicle is a vehicle object to be displayed
      */
-    public  VehicleDetailsController(Vehicle vehicle){
-
-        Dealer dealer = getDealer(vehicle.getWebId());
-        Runnable runnable = () -> setDetails(new VehicleDetailsView(),vehicle, dealer);
-        SwingUtilities.invokeLater(runnable);
+    public  VehicleDetailsController(Vehicle vehicle, Dealer dealer){
 
 
-    }
+       setDetails(new VehicleDetailsView(dealer),vehicle, dealer);
 
-    /**
-     *
-     * @param webId uses webId of a vehicle object to get the associated dealer object
-     * @return dealer assigned with the vehicle object
-     */
-    private Dealer getDealer(String webId) {
 
-        DealerData dealerData = new DealerData();
-        Dealer[] dealers = dealerData.getDealersData();
-        for(Dealer dealer : dealers){
-            if(dealer.getId().equals(webId)){
-                return dealer;
-            }
-        }
-        return null;
+
     }
 
     /**
@@ -62,6 +42,15 @@ public class VehicleDetailsController {
         view.setDealerURLLabel("URL : "+dealer.getUrl());
 
     }
+    /*
+    public static void main(String[] args) {
+        Vehicle v = new Vehicle();
+        v.setAllDetails("2228104413","gmps-aj-dohmann", Category.NEW,2014,
+                "Cadillac","CTS Sedan","3.6L V6 AWD Luxury","CAR",
+                57620.0f,"http://inventory-dmg.assets-cdk.com/5/1/7/13411480715x90.jpg");
 
+        new VehicleDetailsController(v);
+    }
+    */
 
 }

@@ -8,15 +8,12 @@ import java.util.*;
  */
 public class InventoryManager implements InventoryManagerInterface {
     private Map<String , Inventory> inventoryMap = new HashMap<>();
-    private Map<String, String> dealerFolderPathMap = new HashMap<>();
-    private Set<String> vehicleMakeItems =  new HashSet<>();
-    private Set<String> vehicleModelItems = new HashSet<>();
-    private Set<Integer> vehicleYearItems = new HashSet<>();
-    private Set<String> vehicleBodyTypeItems = new HashSet<>();
+    private Map<String, File> dealerFolderPathMap = new HashMap<>();
 
 
-    public InventoryManager(String dataFolderPath) throws FileNotFoundException {
-        this.readInventoryFolder(dataFolderPath);
+    public InventoryManager(Dealer dealer) throws FileNotFoundException {
+        this.readInventoryFolder("data");
+        inventoryMap.put(dealer.getId(),getInventoryByDealerId(dealer.getId()));
     }
 
     /**
@@ -30,9 +27,7 @@ public class InventoryManager implements InventoryManagerInterface {
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.isFile()) {
                 if (fileEntry.getName().contains("gmps")) {
-                    Inventory inventory = getInventoryFromFile(fileEntry);
-                    inventoryMap.put(inventory.getDealerId(), inventory);
-                    dealerFolderPathMap.put(fileEntry.getName(),fileEntry.getAbsolutePath());
+                    dealerFolderPathMap.put(fileEntry.getName(),fileEntry);
                 }
             }
         }
@@ -62,10 +57,6 @@ public class InventoryManager implements InventoryManagerInterface {
                     Integer.parseInt(vehicleInfo[3]),vehicleInfo[4],vehicleInfo[5],vehicleInfo[6],vehicleInfo[7],
                     Float.parseFloat(vehicleInfo[8]),vehicleInfo[9]);
             vehicles.add(v);
-            vehicleMakeItems.add(v.getMake());
-            vehicleModelItems.add(v.getModel());
-            vehicleBodyTypeItems.add(v.getBodyType());
-            vehicleYearItems.add(v.getYear());
         }
         inventory.setDealerId(dealerId);
         inventory.setVehicles(vehicles);
@@ -105,20 +96,27 @@ public class InventoryManager implements InventoryManagerInterface {
      * {@inheritDoc}
      */
     public Inventory getInventoryByDealerId(String dealerId) {
-        return inventoryMap.get(dealerId);
+        Inventory inventory = new Inventory();
+        try {
+             inventory = getInventoryFromFile(dealerFolderPathMap.get(dealerId));
+        }catch (FileNotFoundException e){
+            System.out.println("File associated to the dealer is not found");
+        }
+
+        return inventory;
     }
 
     /**
      * Get a vehicle from a collection by vehicle id
      *
-     * @param vehicles collection of vehicles
+     * @param vehicles collection of vehicleResult
      * @param vehicle vehicle object
      * @return returns a vehicle
      */
     private Vehicle getVehicleById(Collection<Vehicle> vehicles, Vehicle vehicle) {
-        for (Vehicle vehicle_ : vehicles) {
-            if (vehicle.getId().equals(vehicle_.getId())) {
-                return vehicle_;
+        for (Vehicle v : vehicles) {
+            if (vehicle.getId().equals(v.getId())) {
+                return v;
             }
         }
         return null;
@@ -127,18 +125,16 @@ public class InventoryManager implements InventoryManagerInterface {
     /**
      * {@inheritDoc}
      */
-    public void updateInventoryToFile(Inventory inventory) throws Exception {
-        String dealerId = inventory.getDealerId();
-        Collection<Vehicle> vehicles = inventory.getVehicles();
+    public void updateInventoryToFile(Dealer dealer) throws Exception {
+
         String vehicleDetails = "id~webId~category~year~make~model~trim~type~price\n";
         StringBuilder stringBuilder = new StringBuilder();
-        for (Vehicle vehicle : vehicles) {
+        for (Vehicle vehicle : inventoryMap.get(dealer.getId()).getVehicles()) {
             stringBuilder.append(vehicle.toString()).append("\n");
         }
-
         vehicleDetails = vehicleDetails+ stringBuilder.toString();
         // dealerId is the Inventory file name
-        String inventoryFilePath = dealerFolderPathMap.get(dealerId);
+        String inventoryFilePath = dealerFolderPathMap.get(dealer.getId()).getAbsolutePath();
         Util.writeToFile(inventoryFilePath, vehicleDetails,false);
     }
 
@@ -151,21 +147,7 @@ public class InventoryManager implements InventoryManagerInterface {
     }
 
 
-    public Set<String> getVehicleMakeItems() {
-        return vehicleMakeItems;
-    }
 
-    public Set<String> getVehicleModelItems() {
-        return vehicleModelItems;
-    }
-
-    public Set<Integer> getVehicleYearItems() {
-        return vehicleYearItems;
-    }
-
-    public Set<String> getVehicleBodyTypeItems() {
-        return vehicleBodyTypeItems;
-    }
 
 
 }

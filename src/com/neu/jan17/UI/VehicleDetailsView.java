@@ -1,13 +1,17 @@
 package com.neu.jan17.UI;
 
+import com.neu.jan17.data.Dealer;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 
 public class VehicleDetailsView extends VehicleDetailsViewerData{
 
+    private Dealer dealer;
 
-    public VehicleDetailsView(){
+    public VehicleDetailsView(Dealer dealer){
+        this.dealer = dealer;
         setUIFont(new FontUIResource("Arial",Font.PLAIN,20));
         createFrame();
 
@@ -151,7 +155,7 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
 
         backButton.addActionListener(e -> {
             mainFrame.dispose();
-            new CustomerVehicleSearchScreen();
+            new CustomerVehicleSearchScreen(dealer);
         });
 
     }

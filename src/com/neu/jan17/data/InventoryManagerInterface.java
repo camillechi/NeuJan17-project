@@ -5,7 +5,6 @@ import java.io.IOException;
 public interface InventoryManagerInterface {
     /**
      * Add a new vehicle to an inventory; to save changes to files,
-     * use {@link #updateInventoryToFile(Inventory) updateInventoryFile} method.
      *
      * @param dealer dealer object
      * @param vehicle  vehicle object
@@ -14,7 +13,6 @@ public interface InventoryManagerInterface {
 
     /**
      * <p>Remove an existing vehicle from an inventory; to save changes to files,
-     * use {@link #updateInventoryToFile(Inventory) updateInventoryFile} method.
      *
      * @param dealer  dealer object
      * @param vehicle vehicle object
@@ -32,8 +30,8 @@ public interface InventoryManagerInterface {
     /**
      * Update inventory file.
      *
-     * @param inventory      inventory object to be saved
+     * @param dealer      inventory of the dealer to be saved
      * @throws IOException
      */
-    void updateInventoryToFile(Inventory inventory) throws Exception;
+    void updateInventoryToFile(Dealer dealer) throws Exception;
 }

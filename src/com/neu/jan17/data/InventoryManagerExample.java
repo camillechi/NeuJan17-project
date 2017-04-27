@@ -12,7 +12,9 @@ public class InventoryManagerExample {
     public static void main(String[] args) throws Exception {
         // InventoryManagerInterface is an interface, InventoryManager implements InventoryManagerInterface
         // The constructor of InventoryManager takes the path to the data folder, and loads all inventory from files
-        InventoryManagerInterface inventoryManager = new InventoryManager("data");
+        Dealer d = new Dealer();
+        d.setId("gmps-aj-dohmann");
+        InventoryManagerInterface inventoryManager = new InventoryManager(d);
 
         // Get an inventory by its dealer id
         Inventory inventory = inventoryManager.getInventoryByDealerId("gmps-aj-dohmann");
