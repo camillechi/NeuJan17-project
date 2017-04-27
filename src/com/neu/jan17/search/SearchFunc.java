@@ -3,6 +3,7 @@ package com.neu.jan17.search;
 import java.util.Collection;
 import java.util.List;
 
+import com.neu.jan17.data.Inventory;
 import com.neu.jan17.data.Vehicle;
 
 
@@ -43,5 +44,8 @@ public interface SearchFunc {
      * @return			false if nothing found, else true
      */
 	public SearchResult searchByFilters(Collection<Vehicle> base, List<Filter> filters);
+	
+	// might be used to populate the page
+	public Inventory getInventory();
 	
 }
