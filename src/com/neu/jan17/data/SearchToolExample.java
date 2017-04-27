@@ -8,8 +8,8 @@ import com.neu.jan17.search.*;
 public class SearchToolExample {
 	public static void main(String[] args) {
 		try {
-			//create an object to help searching and pass in a pathname(absolute or relative)
-			SearchTool s = new SearchTool("data");
+			//create an object to help searching and pass in a dealerId(absolute or relative)
+			SearchTool s = new SearchTool("gmps-aj-dohmann");
 			
 			
 			/*----------------------- search by keyword ------------------------*/
