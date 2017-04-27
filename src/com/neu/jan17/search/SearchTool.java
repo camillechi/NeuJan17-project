@@ -49,6 +49,11 @@ public class SearchTool implements SearchFunc {
 	public SearchResult searchByFilters(List<Filter> filters) {
 		return searchByFilters(inventory.getVehicles(), filters);
 	}
+	
+	@Override
+	public Inventory getInventory() {
+		return inventory;
+	}
 
 	private boolean matchKeyWord(Vehicle v, String kw) {
 		return v.getMake().indexOf(kw) >= 0 || v.getModel().indexOf(kw) >= 0 || v.getBodyType().indexOf(kw) >= 0 || v.getWebId().indexOf(kw) >= 0;
@@ -65,5 +70,6 @@ public class SearchTool implements SearchFunc {
 		    }
 		}
 	}
+
 
 }
