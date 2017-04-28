@@ -114,7 +114,6 @@ implements CustomerVehicleSearchInterface{
 	@Override
 	public void setLayout() {
 
-
 		try {
 			searchTool = new SearchTool(dealer.getId());
 			InventoryManager inventoryManager = new InventoryManager(dealer);
@@ -123,7 +122,7 @@ implements CustomerVehicleSearchInterface{
 		}catch (Exception e){
 			System.out.println("Inventory not found");
 		}
-		Util.setUIFont(new FontUIResource("",Font.PLAIN,12));
+		Util.setUIFont(new FontUIResource("",Font.BOLD,12));
 		vehicleResult = (List<Vehicle>) inventory.getVehicles();
 		setFilterItems(vehicleResult);
 		setTopPanel();
@@ -265,7 +264,10 @@ implements CustomerVehicleSearchInterface{
 	}
 	private JPanel setErrorMessagePanel(){
         JPanel messagePanel = new JPanel(new GridBagLayout());
-        messagePanel.add(new JLabel("NO RESULTS FOUND"));
+        JLabel noResults = new JLabel("NO RESULTS FOUND");
+        noResults.setFont(new Font("serif", Font.BOLD, 14));
+        noResults.setForeground(Color.white);
+        messagePanel.add(noResults);
         messagePanel.setPreferredSize(new Dimension(1600, 40));
         messagePanel.setMaximumSize(new Dimension(1600, 40));
         messagePanel.setMinimumSize(new Dimension(1600, 40));
