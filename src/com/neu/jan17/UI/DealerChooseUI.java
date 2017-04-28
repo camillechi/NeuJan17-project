@@ -88,7 +88,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
         setSize(1500,1500);
         setVisible(true);
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
 
@@ -118,6 +118,8 @@ public class DealerChooseUI extends JFrame implements ActionListener {
             Dealer dealer = new Dealer();
             dealer.setId(getDealerID());
             CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen(dealer);
+            dispose();
+
         }
 
     }
