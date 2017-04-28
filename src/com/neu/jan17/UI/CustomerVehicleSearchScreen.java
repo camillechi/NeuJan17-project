@@ -228,16 +228,16 @@ implements CustomerVehicleSearchInterface{
 
 		sort.addActionListener(e -> {
 			if(sort.getSelectedItem().equals("Year ascending")){
-				sortInventory.sortVehiclesByYear(vehicleResult);
+				sortInventory.sortVehiclesByYearAsc(vehicleResult);
 				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Year descending")){
-				sortInventory.sortVehiclesByYearReverse(vehicleResult);
+				sortInventory.sortVehiclesByYearDesc(vehicleResult);
 				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Price low to high")){
-				sortInventory.sortVehiclesByPrice(vehicleResult);
+				sortInventory.sortVehiclesByPriceAsc(vehicleResult);
 				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Price high to low")){
-				sortInventory.sortVehiclesByPriceReverse(vehicleResult);
+				sortInventory.sortVehiclesByPriceDesc(vehicleResult);
 				displaySortResults();
 			}
 		});
