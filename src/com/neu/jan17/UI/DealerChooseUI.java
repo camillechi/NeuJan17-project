@@ -117,7 +117,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
             getDealerID = "gmps-" + dealerItem.getSelectedItem();
             Dealer dealer = new Dealer();
             dealer.setId(getDealerID());
-            //CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen(dealer);
+            CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen(dealer);
         }
 
     }
