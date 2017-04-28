@@ -22,8 +22,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
 
 
     public DealerChooseUI() {
-    	
-    	setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
         URL imgPathUrl = getClass().getResource("Car.jpg");
         JLabel background = new JLabel(new ImageIcon(imgPathUrl.getPath()));
         add(background);
@@ -35,11 +34,14 @@ public class DealerChooseUI extends JFrame implements ActionListener {
             dealerID[i] = dd.getDealersData()[i].getId().substring(5, dd.getDealersData()[i].getId().length());
         }
         dealerItem = new JComboBox(dealerID);
-        
+
 
         headline = new JLabel("Dealer Choose");
 
         dealerNameLabel = new JLabel("Choose your dealer:");
+        Font font1 = new Font("SansSerif", Font.BOLD, 20);
+
+        dealerNameLabel.setFont(font1);
         //JPanel bottomPanel = new JPanel();
         JButton selectDealer = new JButton("CONFIRM");
         selectDealer.setPreferredSize(new Dimension(100,50));
@@ -49,7 +51,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
         backButton.setActionCommand("BACK");
         selectDealer.addActionListener(this);
         selectDealer.setActionCommand("CONFIRM");
-//        
+//
 //        selectDealer.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
@@ -72,14 +74,17 @@ public class DealerChooseUI extends JFrame implements ActionListener {
 
         JPanel bottomPanel = new JPanel();
         JPanel middlePanel = new JPanel();
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPanel footerPanel = new JPanel();
+        //bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         middlePanel.add(dealerNameLabel);
         middlePanel.add(dealerItem);
         bottomPanel.add(selectDealer);
         bottomPanel.add(backButton);
-        bottomPanel.setBackground(new Color(127,179,213));
-        add(bottomPanel,BorderLayout.SOUTH);
-        add(middlePanel,BorderLayout.SOUTH);
+        //bottomPanel.setBackground(new Color(127,179,213));
+        footerPanel.add(middlePanel);
+        footerPanel.add(bottomPanel);
+        add(footerPanel,BorderLayout.SOUTH);
+
         setSize(1500,1500);
         setVisible(true);
 
@@ -96,10 +101,10 @@ public class DealerChooseUI extends JFrame implements ActionListener {
         DealerChooseUI dealerChooseUI = new DealerChooseUI();
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		JButton backButton = (JButton) e.getSource();
-		JButton selectDealer = (JButton)e.getSource();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton backButton = (JButton) e.getSource();
+        JButton selectDealer = (JButton)e.getSource();
         if (e.getActionCommand().equals("BACK")) {
             // redirect to the main page
 //        	DealerChooseUI().setVisible(false);
@@ -108,12 +113,12 @@ public class DealerChooseUI extends JFrame implements ActionListener {
             mainPage.setVisible(true);
         } else if (e.getActionCommand().equals("CONFIRM")) {
             // redirect to team 2's page
-        	//pass the specific dealer object info
-        	 getDealerID = "gmps-" + dealerItem.getSelectedItem();
-        	 Dealer dealer = new Dealer();
-        	 dealer.setId(getDealerID());
-        	 CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen(dealer);
+            //pass the specific dealer object info
+            getDealerID = "gmps-" + dealerItem.getSelectedItem();
+            Dealer dealer = new Dealer();
+            dealer.setId(getDealerID());
+            //CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen(dealer);
         }
-		
-	}
+
+    }
 }
