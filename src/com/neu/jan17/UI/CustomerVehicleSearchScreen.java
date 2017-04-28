@@ -21,23 +21,12 @@ implements CustomerVehicleSearchInterface{
 		super();
 		this.dealer = dealer;
 		setLayout();
-		this.setVisible(true);
 
 	}
 
 	@Override
 	public void setRightPanel() {
-
-		int counter =0;
-
-		for(Vehicle vehicle : vehicleResult ){
-			if(counter== 20){
-				break;
-			}
-			vehicleDetailsPane.add(setVehicleDetailsPanel(vehicle));
-			vehicleDetailsPane.add(Box.createRigidArea(new Dimension(0,10)));
-			counter++;
-		}
+		new BackgroundUICreator().execute();
 
 	}
 
@@ -96,7 +85,6 @@ implements CustomerVehicleSearchInterface{
 		container.add(leftPanel, BorderLayout.WEST);
 	}
 
-
 	@Override
 	public void setTopPanel() {
 
@@ -149,6 +137,7 @@ implements CustomerVehicleSearchInterface{
 		container.add(scrollPane);
 		setRightPanel();
 		addListeners();
+		this.setVisible(true);
 	}
 
 	private void defineFilters() {
@@ -168,7 +157,7 @@ implements CustomerVehicleSearchInterface{
 		categoryFilter = new JComboBox(categoryItems.toArray());
 	}
 
-	private JPanel setVehicleDetailsPanel(Vehicle vehicle){
+	private  JPanel setVehicleDetailsPanel(Vehicle vehicle){
 
 		vehicleDetailsPanel = new JPanel();
 		try {
@@ -241,23 +230,23 @@ implements CustomerVehicleSearchInterface{
 		sort.addActionListener(e -> {
 			if(sort.getSelectedItem().equals("Year ascending")){
 				sortInventory.sortVehiclesByYear(vehicleResult);
-				displayResults();
+				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Year descending")){
 				sortInventory.sortVehiclesByYearReverse(vehicleResult);
-				displayResults();
+				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Price low to high")){
 				sortInventory.sortVehiclesByPrice(vehicleResult);
-				displayResults();
+				displaySortResults();
 			}else if(sort.getSelectedItem().equals("Price high to low")){
 				sortInventory.sortVehiclesByPriceReverse(vehicleResult);
-				displayResults();
+				displaySortResults();
 			}
 		});
 
 		Action searchAction = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e)  {
-				SearchResult result = searchTool.searchByKeyWord((List<Vehicle>) inventory.getVehicles(),
+				SearchResult result = searchTool.searchByKeyWord(inventory.getVehicles(),
 						searchBar.getText());
 				vehicleResult = result.getResult();
 				clearFilterItems();
@@ -274,8 +263,31 @@ implements CustomerVehicleSearchInterface{
 		homeButton.addActionListener(e -> {new MainPage();this.dispose();});
 
 	}
+	private JPanel setErrorMessagePanel(){
+        JPanel messagePanel = new JPanel(new GridBagLayout());
+        messagePanel.add(new JLabel("NO RESULTS FOUND"));
+        messagePanel.setPreferredSize(new Dimension(1600, 40));
+        messagePanel.setMaximumSize(new Dimension(1600, 40));
+        messagePanel.setMinimumSize(new Dimension(1600, 40));
+        messagePanel.setBackground(Color.GRAY);
+        return messagePanel;
+    }
 
-	private void resetFilters(){
+    private void displaySortResults() {
+        vehicleDetailsPane.removeAll();
+        if (vehicleResult.isEmpty()) {
+
+            vehicleDetailsPane.add(setErrorMessagePanel());
+        } else {
+            vehicleResult.forEach(vehicle -> {
+                vehicleDetailsPane.add(setVehicleDetailsPanel(vehicle));
+                vehicleDetailsPane.add(Box.createRigidArea(new Dimension(0, 10)));
+            });
+        }
+        vehicleDetailsPane.updateUI();
+    }
+
+    private void resetFilters(){
 		makeFilter.setEnabled(true);
 		modelFilter.setEnabled(true);
 		bodyTypeFilter.setEnabled(true);
@@ -336,13 +348,8 @@ implements CustomerVehicleSearchInterface{
 		vehicleDetailsPane.removeAll();
 
 		if (vehicleResult.isEmpty()) {
-			JPanel messagePanel = new JPanel(new GridBagLayout());
-			messagePanel.add(new JLabel("NO RESULTS FOUND"));
-			messagePanel.setPreferredSize(new Dimension(1600, 40));
-			messagePanel.setMaximumSize(new Dimension(1600, 40));
-			messagePanel.setMinimumSize(new Dimension(1600, 40));
-			messagePanel.setBackground(Color.GRAY);
-			vehicleDetailsPane.add(messagePanel);
+
+			vehicleDetailsPane.add(setErrorMessagePanel());
 		} else {
 			setRightPanel();
 		}
@@ -455,29 +462,43 @@ implements CustomerVehicleSearchInterface{
 				filterListener(categoryFilter,Category.valueOf(selectedItem));
 			}
 		}
-
-		private Object getValueForFilter(JComboBox selectedFilter,String selectedItem){
-			if(selectedFilter.equals(categoryFilter)){
-				return Category.valueOf(selectedItem);
-			}else if(selectedFilter.equals(priceFilter)){
-				return Float.valueOf(selectedItem);
-			}else if(selectedFilter.equals(yearFilter)){
-				return Integer.valueOf(selectedItem);
-			}else {
-				return selectedItem;
-			}
-		}
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			if (event.getStateChange() == ItemEvent.SELECTED && listenerFlag) {
 				listenerFlag = false;
 				JComboBox selectedFilter = (JComboBox) event.getSource();
 				String selectedItem =  (String)event.getItem();
-
 				setAction(selectedFilter, selectedItem);
 				SwingUtilities.invokeLater(()->listenerFlag = true);
 			}
 
 		}
 	}
+
+	private class BackgroundUICreator extends SwingWorker<Void,JPanel>{
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			vehicleResult.forEach(vehicle -> publish(setVehicleDetailsPanel(vehicle)));
+			return null;
+		}
+
+		@Override
+		public void process(List<JPanel>chunks){
+			chunks.forEach(jPanel -> {
+			    synchronized (this) {
+                    vehicleDetailsPane.add(jPanel);
+                    vehicleDetailsPane.add(Box.createRigidArea(new Dimension(0, 10)));
+                }
+			});
+			vehicleDetailsPane.revalidate();
+		}
+	}
+
+	public static void main(String[] args) {
+		Dealer dealer = new Dealer();
+		dealer.setId("gmps-aj-dohmann");
+		new CustomerVehicleSearchScreen(dealer);
+	}
+
 }

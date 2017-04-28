@@ -25,7 +25,7 @@ public class CustomerVehicleSearchScreenData extends JFrame{
     protected SearchTool searchTool;
     protected Inventory inventory;
     protected List<Vehicle> vehicleResult;
-    protected Set<String> modelItems = new HashSet<>(),
+    protected Set<String> modelItems = new TreeSet<>(),
             makeItems = new TreeSet<>(),
             bodyTypeItems = new TreeSet<>(),
             yearItems = new TreeSet<>(),
