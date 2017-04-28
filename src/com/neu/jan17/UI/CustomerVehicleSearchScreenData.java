@@ -17,7 +17,7 @@ public class CustomerVehicleSearchScreenData extends JFrame{
     protected JButton homeButton, viewDetails, searchButton, clearFilters;
     protected JLabel topPicture, modelFilterLabel, yearFilterLabel, makeFilterLabel, priceFilterLabel,
                         bodyTypeFilterLabel,categoryFilterLabel, sortLabel, vehicleImageLabel, vehicleModel, vehicleMake,
-                        vehicleBodyType, vehiclePrice, vehicleCategory, vehicleYear ;
+                        vehicleBodyType, vehiclePrice, vehicleCategory, vehicleYear,searchVehicle ;
     protected JComboBox modelFilter, yearFilter, makeFilter, priceFilter, bodyTypeFilter, categoryFilter, sort;
     protected JTextField searchBar;
     protected JScrollPane scrollPane;
@@ -26,10 +26,10 @@ public class CustomerVehicleSearchScreenData extends JFrame{
     protected Inventory inventory;
     protected List<Vehicle> vehicleResult;
     protected Set<String> modelItems = new HashSet<>(),
-            makeItems = new HashSet<>(),
-            bodyTypeItems = new HashSet<>(),
-            yearItems = new HashSet<>(),
-            categoryItems = new HashSet<>()
+            makeItems = new TreeSet<>(),
+            bodyTypeItems = new TreeSet<>(),
+            yearItems = new TreeSet<>(),
+            categoryItems = new TreeSet<>()
     ;
     protected Set<Float> priceItems = new TreeSet<>();
     protected boolean listenerFlag = true;
