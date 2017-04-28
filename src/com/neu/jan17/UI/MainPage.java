@@ -37,7 +37,6 @@ class MainPage extends JFrame implements ActionListener {
 
         setTitle("Vehicle Management");
         setSize(1500, 1500);
-//        setSize(1000, 500);
         customerButton.addActionListener(this);
         customerButton.setActionCommand("CUSTOMER");
         dealerButton.addActionListener(this);
@@ -57,12 +56,9 @@ class MainPage extends JFrame implements ActionListener {
 
         } else if (e.getActionCommand().equals("DEALER")) {
             // redirect to Dealers Management Page
-            // MainPage.setVisible(false);
             DealerInfoTable dealerInfoTable = new DealerInfoTable();
             dealerInfoTable.setVisible(true);
             dispose();
-
-
         }
     }
 
