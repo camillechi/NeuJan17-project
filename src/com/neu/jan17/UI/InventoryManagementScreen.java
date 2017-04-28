@@ -267,6 +267,7 @@ public class InventoryManagementScreen extends JFrame {
                 leftPanel.setVisible(true);
                 filterButton.setEnabled(false);
                 updateComboBox();
+                updateButton.setEnabled(false);
             }
         });
 
@@ -357,6 +358,12 @@ public class InventoryManagementScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 filterButton.setEnabled(true);
                 leftPanel.setVisible(false);
+                if (!backup.isEmpty()) {
+                    ve.addDatas(backup);
+                    backup.removeAll();
+                }
+                repaint();
+                updateButton.setEnabled(true);
             }
         });
 
