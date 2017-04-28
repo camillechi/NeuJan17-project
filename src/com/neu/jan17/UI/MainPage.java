@@ -9,13 +9,9 @@ import java.net.URL;
 // UI for Main Page
 class MainPage extends JFrame implements ActionListener {
     private JPanel MainPage = new JPanel();
-    private final DealerInfoTable dealerInfoTable = new DealerInfoTable();
-    private final DealerChooseUI dealerChooseUI = new DealerChooseUI();
 
     // Initiate the Main Page
     public MainPage() {
-        dealerChooseUI.setVisible(false);
-        dealerInfoTable.setVisible(false);
         setLayout(new BorderLayout());
         URL imgPathUrl = getClass().getResource("background.jpg");
         JLabel background = new JLabel(new ImageIcon(imgPathUrl.getPath()));
@@ -39,7 +35,6 @@ class MainPage extends JFrame implements ActionListener {
         bottomPanel.add(dealerButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        //background.setLayout(new BoxLayout(background,BoxLayout.Y_AXIS));
         setTitle("Vehicle Management");
         setSize(1000, 500);
         customerButton.addActionListener(this);
@@ -52,16 +47,20 @@ class MainPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Customer")) {
             // redirect to Dealers Information
-            dispose();
+            DealerChooseUI dealerChooseUI = new DealerChooseUI();
             dealerChooseUI.setVisible(true);
+            dispose();
+
 
 
         } else if (e.getActionCommand().equals("Dealers")) {
             // redirect to Dealers Management Page
             // MainPage.setVisible(false);
-
-            dispose();
+            DealerInfoTable dealerInfoTable = new DealerInfoTable();
             dealerInfoTable.setVisible(true);
+            dispose();
+
+
         }
     }
 
