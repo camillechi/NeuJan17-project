@@ -125,6 +125,10 @@ class DealerInfoTable extends JFrame implements ActionListener {
 
         } else if (e.getActionCommand().equals("Manage")) {
             // redirect to team 4's page
+            dispose();
+            InventoryManagementScreen inventoryManagementScreen = new InventoryManagementScreen();
+             inventoryManagementScreen.setVisible(true);
+            
         }
     }
 
