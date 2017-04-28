@@ -1,14 +1,26 @@
 package com.neu.jan17.data;
 
+
+import java.lang.reflect.Method;
 import java.util.*;
 
 // Sort function for Inventory
 public class SortInventory {
-    public void sortVehiclesByYear(List<Vehicle> vehicle) {
+
+    public void sort(SortInventory sortInventory, String selectedSort, List<Vehicle> result) throws Exception{
+        selectedSort = selectedSort.replaceAll("\\s+","");
+        Method m = this.getClass().getDeclaredMethod("sortVehiclesBy"+ selectedSort, List.class);
+        m.invoke(sortInventory,result);
+    }
+
+
+    //List<Vehicle> test = new ArrayList<>();import java.lang.reflect.Method;
+
+    public void sortVehiclesByYearAsc(List<Vehicle> vehicle) {
         vehicle.sort(Comparator.comparing(Vehicle::getYear));
     }
 
-    public void sortVehiclesByYearReverse(List<Vehicle> vehicle){
+    public void sortVehiclesByYearDesc(List<Vehicle> vehicle){
         vehicle.sort(Comparator.comparing(Vehicle::getYear).reversed());
     }
 
@@ -20,11 +32,11 @@ public class SortInventory {
         vehicle.sort(Comparator.comparing(Vehicle::getCategory));
     }
 
-    public void sortVehiclesByPrice(List<Vehicle> vehicle){
+    public void sortVehiclesByPriceAsc(List<Vehicle> vehicle){
         vehicle.sort(Comparator.comparing(Vehicle::getPrice));
     }
 
-    public void sortVehiclesByPriceReverse(List<Vehicle> vehicle){
+    public void sortVehiclesByPriceDesc(List<Vehicle> vehicle){
         vehicle.sort(Comparator.comparing(Vehicle::getPrice).reversed());
     }
 
