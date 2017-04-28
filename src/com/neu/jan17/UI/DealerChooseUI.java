@@ -83,7 +83,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
         //bottomPanel.setBackground(new Color(127,179,213));
         footerPanel.add(middlePanel);
         footerPanel.add(bottomPanel);
-        add(footerPanel,BorderLayout.SOUTH);
+        add(footerPanel,BorderLayout.NORTH);
 
         setSize(1500,1500);
         setVisible(true);
