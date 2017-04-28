@@ -154,6 +154,7 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
         });
 
         backButton.addActionListener(e -> {
+
             mainFrame.dispose();
             new CustomerVehicleSearchScreen(dealer);
         });

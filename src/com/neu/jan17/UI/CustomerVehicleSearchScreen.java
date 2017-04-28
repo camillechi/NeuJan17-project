@@ -1,397 +1,510 @@
 package com.neu.jan17.UI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.neu.jan17.data.*;
+import com.neu.jan17.search.*;
+
+import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+
+public class CustomerVehicleSearchScreen extends CustomerVehicleSearchScreenData
+        implements CustomerVehicleSearchInterface{
 
 
-public class CustomerVehicleSearchScreen extends JFrame implements CustomerVehicleSearchInterface{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private JPanel leftPanel,rightPanel,pane1,pane2,pane3,pane4,pane5,topPanel;
-	private JButton homeBtn,viewDetails1,viewDetails2,viewDetails3,viewDetails4,viewDetails5,searchBtn,searchFilter;
-	private JComboBox<String> filterYear,filterModel,filterMake,filterType,filterPrice,filterCategory,filterSort;
-	private JLabel topPicture,vehicleLabel,label1,label2,label3,label4,label5,label6;
-	private JLabel priceLabel1,priceLabel2,priceLabel3,priceLabel4,priceLabel5,priceLabel6;
-	private JLabel typeLabel1,typeLabel2,typeLabel3,typeLabel4,typeLabel5,typeLabel6;
-	private JLabel categoryLabel1,categoryLabel2,categoryLabel3,categoryLabel4,categoryLabel5,categoryLabel6;
-	private JTextField searchBar;
-	private JScrollPane scrollPane;
-	
-	public CustomerVehicleSearchScreen(){
-		super("Vehicle Search Screen");
-		setSize(1800,1000);
-		setLocation(10,10);
-		
-		rightPanel = new JPanel();
-		leftPanel = new JPanel();
-		topPanel=new JPanel();
-		scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		Container c = getContentPane();
-		c.setLayout(new BorderLayout());
-		c.add(leftPanel,BorderLayout.WEST);
-		c.add(rightPanel,BorderLayout.CENTER);
-		c.add(topPanel,BorderLayout.NORTH);
-		c.add(scrollPane,BorderLayout.CENTER);
-		
-		setRightPanel();
-		setLeftPanel();
-		setTopPanel();
-		setLayout();
-		
-		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-		
+    public CustomerVehicleSearchScreen(Dealer dealer){
+        super();
+        this.dealer = dealer;
+        setLayout();
+        this.setVisible(true);
+
+    }
+
 	@Override
 	public void setRightPanel() {
-		
-		rightPanel.setBackground(new Color(127,179,213));
-		rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		
-		//Setting scrollpane
-		scrollPane.setViewportView(rightPanel);
-		
-		//Setting Panels
-		pane1 = new JPanel();
-		pane1.setBackground(new Color(235,245,251));
-		pane1.setPreferredSize(new Dimension(1000, 120));
 
-		pane2 = new JPanel();
-		pane2.setBackground(new Color(235,245,251));
-		pane2.setPreferredSize(new Dimension(1000, 120));
+        int counter =0;
 
-		pane3 = new JPanel();
-		pane3.setBackground(new Color(235,245,251));
-		pane3.setPreferredSize(new Dimension(1000, 120));
+        for(Vehicle vehicle : vehicleResult ){
+            if(counter== 20){
+                break;
+            }
+            vehicleDetailsPane.add(setVehicleDetailsPanel(vehicle));
+            vehicleDetailsPane.add(Box.createRigidArea(new Dimension(0,10)));
+            counter++;
+          }
 
-		pane4 = new JPanel();
-		pane4.setBackground(new Color(235,245,251));
-		pane4.setPreferredSize(new Dimension(1000, 120));
-
-		pane5 = new JPanel();
-		pane5.setBackground(new Color(235,245,251));
-		pane5.setPreferredSize(new Dimension(1000, 120));
-		
-		
-		viewDetails1 = new JButton("View Details");viewDetails1.setBackground(new Color(127,179,213));
-		viewDetails2 = new JButton("View Details");viewDetails2.setBackground(new Color(127,179,213));
-		viewDetails3 = new JButton("View Details");viewDetails3.setBackground(new Color(127,179,213));
-		viewDetails4 = new JButton("View Details");viewDetails4.setBackground(new Color(127,179,213));
-		viewDetails5 = new JButton("View Details");viewDetails5.setBackground(new Color(127,179,213));
-		
-		ViewDetailsListener viewDetails = new ViewDetailsListener();
-		viewDetails1.addActionListener(viewDetails);
-		viewDetails2.addActionListener(viewDetails);
-		viewDetails3.addActionListener(viewDetails);
-		viewDetails4.addActionListener(viewDetails);
-		viewDetails5.addActionListener(viewDetails);
-		
-		//will be changed
-		label1 = new JLabel("2017 Honda Accord");label1.setFont(new Font("Serif", Font.BOLD, 22));
-		label2 = new JLabel("2017 Honda Coupe");label2.setFont(new Font("Serif", Font.BOLD, 22));
-		label3 = new JLabel("2017 Honda Sedan");label3.setFont(new Font("Serif", Font.BOLD, 22));
-		label4 = new JLabel("2017 Honda Hybrid");label4.setFont(new Font("Serif", Font.BOLD, 22));
-		label5 = new JLabel("2017 Honda Odessey");label5.setFont(new Font("Serif", Font.BOLD, 22));
-		label6 = new JLabel("2017 Honda Odessey");label6.setFont(new Font("Serif", Font.BOLD, 22));
-		//will be changed
-		priceLabel1 = new JLabel("MSRP: $31,000");priceLabel1.setFont(new Font("Serif", Font.PLAIN, 18));
-		priceLabel2 = new JLabel("MSRP: $32,000");priceLabel2.setFont(new Font("Serif", Font.PLAIN, 18));
-		priceLabel3 = new JLabel("MSRP: $33,000");priceLabel3.setFont(new Font("Serif", Font.PLAIN, 18));
-		priceLabel4 = new JLabel("MSRP: $34,000");priceLabel4.setFont(new Font("Serif", Font.PLAIN, 18));
-		priceLabel5 = new JLabel("MSRP: $35,000");priceLabel5.setFont(new Font("Serif", Font.PLAIN, 18));
-		priceLabel6 = new JLabel("MSRP: $36,000");priceLabel6.setFont(new Font("Serif", Font.PLAIN, 18));
-		//will be changed
-		typeLabel1 = new JLabel("Type1:");typeLabel1.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel1 = new JLabel("Category1:");categoryLabel1.setFont(new Font("Serif", Font.PLAIN, 15));
-		typeLabel2 = new JLabel("Type2:");typeLabel2.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel2 = new JLabel("Category1:");categoryLabel2.setFont(new Font("Serif", Font.PLAIN, 15));
-		typeLabel3 = new JLabel("Type3:");typeLabel3.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel3 = new JLabel("Category1:");categoryLabel3.setFont(new Font("Serif", Font.PLAIN, 15));
-		typeLabel4 = new JLabel("Type4:");typeLabel4.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel4 = new JLabel("Category1:");categoryLabel4.setFont(new Font("Serif", Font.PLAIN, 15));
-		typeLabel5 = new JLabel("Type5:");typeLabel5.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel5 = new JLabel("Category1:");categoryLabel5.setFont(new Font("Serif", Font.PLAIN, 15));
-		typeLabel6 = new JLabel("Type6:");typeLabel6.setFont(new Font("Serif", Font.PLAIN, 15));
-		categoryLabel6 = new JLabel("Category1:");categoryLabel6.setFont(new Font("Serif", Font.PLAIN, 15));
 	}
-	
+
 	@Override
 	public void setLeftPanel() {
-	
-		
-		leftPanel.setBackground(new Color(127,179,213));
-		leftPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		
-		String[] year = {"Year:","<2014","2015","2016","2017",">2017"};
-		filterYear = new JComboBox<String>(year);
-		filterYear.setPreferredSize(new Dimension(180,26));
 
-		String[] model = {"Model:","Model1","Model2","Model3","Model4","Model5"};
-		filterModel = new JComboBox<String>(model);
-		filterModel.setPreferredSize(new Dimension(180,26));
+        clearFilters = new JButton("CLEAR FILTERS");
+        clearFilters.setPreferredSize(new Dimension(250,30));
+        clearFilters.setMinimumSize(new Dimension(250,30));
+        clearFilters.setMaximumSize(new Dimension(250,30));
+        makeFilterLabel = new JLabel("MAKE");
+        modelFilterLabel = new JLabel("MODEL");
+        bodyTypeFilterLabel = new JLabel("BODY TYPE");
+        yearFilterLabel = new JLabel("YEAR");
+        priceFilterLabel = new JLabel("PRICE");
+        categoryFilterLabel = new JLabel("CATEGORY");
 
-		String[] make = {"Make:","Make1","Make2","Make3","Make4","Make5"};
-		filterMake = new JComboBox<String>(make);
-		filterMake.setPreferredSize(new Dimension(180,26));
+       defineFilters();
 
-		String[] type = {"Type:","Type1","Type2","Type3","Type4","Type5"};
-		filterType = new JComboBox<String>(type);
-		filterType.setPreferredSize(new Dimension(180,26));
 
-		String[] price = {"Price:","0-10,000","10,000-20,000","20,000-30,000","30,000-40,000","40,000-50,000","50,000-60,000"};
-		filterPrice = new JComboBox<String>(price);
-		filterPrice.setPreferredSize(new Dimension(180,26));
+        BoxLayout leftPanelLayout = new BoxLayout(leftPanel,BoxLayout.PAGE_AXIS);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanel.add(Box.createVerticalGlue());
+        leftPanel.add(Box.createRigidArea(new Dimension(0,100)));
+        leftPanel.add(modelFilterLabel);
+        leftPanel.add(modelFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(makeFilterLabel);
+        leftPanel.add(makeFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(bodyTypeFilterLabel);
+        leftPanel.add(bodyTypeFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(yearFilterLabel);
+        leftPanel.add(yearFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(priceFilterLabel);
+        leftPanel.add(priceFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(categoryFilterLabel);
+        leftPanel.add(categoryFilter);
+        leftPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        leftPanel.add(clearFilters);
 
-		String[] category = {"Category:","Category1","Category2","Category3","Category4","Category5"};
-		filterCategory = new JComboBox<String>(category);
-		filterCategory.setPreferredSize(new Dimension(180,26));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0,40,500,40));
+        leftPanel.setBackground(Color.white);
 
-		String[] sortBy = {"Sort By:","Year Asc","Year Desc","Price Asc","Price Desc"};
-		filterSort = new JComboBox<String>(sortBy);
-		filterSort.setPreferredSize(new Dimension(180,26));
-		
-		vehicleLabel = new JLabel("Search Vehicles");
-		vehicleLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-		
-		topPicture = new JLabel("Space for picture");topPicture.setFont(new Font("Serif", Font.PLAIN, 40));
-		
+        leftPanel.setPreferredSize(new Dimension(300,0));
+        leftPanel.setMaximumSize(new Dimension(300,0));
+        leftPanel.setMinimumSize(new Dimension(300,0));
+
+        container.add(leftPanel, BorderLayout.WEST);
 	}
 
-	@Override
+
+    @Override
 	public void setTopPanel() {
-		
-		searchBar= new JTextField(30);
-		
-		topPanel.setBackground(new Color(41, 128, 185));
-		topPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		
-		//Setting buttons
-		searchBtn = new JButton("Search");
-		
-		searchFilter = new JButton("Search");
-		searchFilter.setPreferredSize(new Dimension(180,25));
-		
-		homeBtn = new JButton("Home");
-		homeBtn.setPreferredSize(new Dimension(150,30));
-		homeBtn.addActionListener(new ActionListener(){
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new MainPage();
-			}
-			
-		});
-		
+	    topPicture = new JLabel(new ImageIcon("D:\\vehicleImage.jpg"));
+
+	    homeButton = new JButton("HOME");
+
+	    searchBar = new JTextField(50);
+	    searchButton = new JButton("search");
+	    sortLabel = new JLabel("SORT:");
+
+	    sort = new JComboBox(new String[]{"Year ascending","Year descending","Price low to high","Price high to low"});
+
+
+
+
+		topPanel.add(Box.createRigidArea(new Dimension(100,0)));
+		topPanel.add(topPicture);
+		topPanel.add(homeButton);
+        topPanel.add(Box.createRigidArea(new Dimension(100,0)));
+		topPanel.add(searchBar);
+        topPanel.add(Box.createRigidArea(new Dimension(10,0)));
+		topPanel.add(searchButton);
+        topPanel.add(Box.createRigidArea(new Dimension(300,0)));
+		topPanel.add(sortLabel);
+		topPanel.add(sort);
+		topPanel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+		topPanel.setBackground(Color.WHITE);
+
+        container.add(topPanel,BorderLayout.NORTH);
+
+
+
 	}
-	
+
 	@Override
 	public void setLayout() {
-		leftPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gc = new GridBagConstraints();
 
-		gc.insets = new Insets(10,30,2,15);
-		gc.anchor = GridBagConstraints.FIRST_LINE_START;
-		gc.weightx = 0.5;
-		gc.weighty = 0.5;
 
-		gc.gridx = 0;gc.gridy = 3;
-		leftPanel.add(vehicleLabel,gc);
-
-		gc.gridx = 0;gc.gridy = 4;
-		leftPanel.add(filterModel,gc);
-
-		gc.gridx = 0;gc.gridy = 5;
-		leftPanel.add(filterMake,gc);
-
-		gc.gridx = 0;gc.gridy = 6;
-		leftPanel.add(filterYear,gc);
-
-		gc.gridx = 0;gc.gridy = 7;
-		leftPanel.add(filterType,gc);
-
-		gc.gridx = 0;gc.gridy = 8;
-		leftPanel.add(filterPrice,gc);
-		
-		
-		gc.gridx = 0;gc.gridy = 9;
-		leftPanel.add(filterCategory,gc);
-		
-		gc.weighty = 30;
-		gc.gridx = 0;gc.gridy = 10;
-		leftPanel.add(searchFilter,gc);
-
-		topPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gc1 = new GridBagConstraints();
-
-		gc1.insets = new Insets(50,50,20,50);
-
-		gc1.weightx = 0.5;gc1.weighty = 0.5;
-
-		gc.gridx = 0;gc.gridy = 2;
-		topPanel.add(topPicture,gc);
-
-		gc1.anchor = GridBagConstraints.LAST_LINE_END;
-		gc1.gridx = 12;gc1.gridy = 4;
-		topPanel.add(searchBar,gc1);
-
-		gc1.anchor = GridBagConstraints.LAST_LINE_START;
-		gc1.gridx = 14;gc1.gridy = 4;
-		topPanel.add(searchBtn,gc1);
-
-		gc1.gridx = 2;gc1.gridy = 4;
-		topPanel.add(homeBtn,gc1);
-		
-		gc1.gridx = 5;gc1.gridy= 4;
-		topPanel.add(filterSort, gc1);
-
-		/*gc1.gridx = 9;gc1.gridy = 4;
-		//topPanel.add(newVehiclesBtn,gc1);
-
-		//gc1.gridx = 10;gc1.gridy = 4;
-		//topPanel.add(viewDealersBtn,gc1);
-
-		//gc1.gridx = 11;gc1.gridy = 4;
-		//topPanel.add(aboutUsBtn,gc1);*/
-
-		rightPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gc2 = new GridBagConstraints();
-
-		gc2.insets = new Insets(3,3,2,5);
-
-		gc2.weightx = 0.5;gc2.weighty = 0.5;
-
-		gc2.anchor = GridBagConstraints.CENTER;
-
-		gc2.gridx = 10;gc2.gridy = 8;
-		rightPanel.add(pane1,gc2);
-
-		gc2.gridx = 10;gc2.gridy = 10;
-		rightPanel.add(pane2,gc2);
-
-		gc2.gridx = 10;gc2.gridy = 12;
-		rightPanel.add(pane3,gc2);
-
-		gc2.gridx = 10;gc2.gridy = 14;
-		rightPanel.add(pane4,gc2);
-
-		gc2.gridx = 10;gc2.gridy = 16;
-		rightPanel.add(pane5,gc2);
-
-		pane1.setLayout(new GridBagLayout());
-		GridBagConstraints gc3 = new GridBagConstraints();
-		gc3.anchor = GridBagConstraints.LAST_LINE_START;
-		gc3.insets = new Insets(2,180,4,2);
-		gc3.gridx = 3;gc3.gridy = 5;
-		pane1.add(label1,gc3);
-		gc3.gridx = 4;gc3.gridy = 5;
-		pane1.add(priceLabel1,gc3);
-		gc3.gridx = 4;gc3.gridy = 6;
-		pane1.add(typeLabel1,gc3);
-		gc3.gridx = 4;gc3.gridy = 7;
-		pane1.add(categoryLabel1,gc3);
-		gc3.anchor = GridBagConstraints.LAST_LINE_END;
-		gc3.gridx = 8;gc3.gridy = 5;
-		pane1.add(viewDetails1,gc3);
-
-		pane2.setLayout(new GridBagLayout());
-		GridBagConstraints gc4 = new GridBagConstraints();
-		gc4.anchor = GridBagConstraints.LAST_LINE_START;
-		gc4.insets = new Insets(2,180,4,2);
-		gc4.gridx = 3;gc4.gridy = 6;
-		pane2.add(label2,gc4);
-		gc4.gridx = 4;gc4.gridy = 6;
-		pane2.add(priceLabel2,gc4);
-		gc4.gridx = 4;gc4.gridy = 7;
-		pane2.add(typeLabel2,gc4);
-		gc4.gridx = 4;gc4.gridy = 8;
-		pane2.add(categoryLabel2,gc4);
-		gc4.anchor = GridBagConstraints.LAST_LINE_END;
-		gc4.gridx = 8;gc4.gridy = 6;
-		pane2.add(viewDetails2,gc4);
-
-		pane3.setLayout(new GridBagLayout());
-		GridBagConstraints gc5 = new GridBagConstraints();
-		gc5.anchor = GridBagConstraints.LAST_LINE_START;
-		gc5.insets = new Insets(2,180,4,2);
-		gc5.gridx = 3;gc5.gridy = 7;
-		pane3.add(label3,gc5);
-		gc5.gridx = 4;gc5.gridy = 7;
-		pane3.add(priceLabel3,gc5);
-		gc5.gridx = 4;gc5.gridy = 8;
-		pane3.add(typeLabel3,gc5);
-		gc5.gridx = 4;gc5.gridy = 9;
-		pane3.add(categoryLabel3,gc5);
-		gc5.anchor = GridBagConstraints.LAST_LINE_END;
-		gc5.gridx = 8;gc5.gridy = 7;
-		pane3.add(viewDetails3,gc5);
-
-		pane4.setLayout(new GridBagLayout());
-		GridBagConstraints gc6 = new GridBagConstraints();
-		gc6.anchor = GridBagConstraints.LAST_LINE_START;
-		gc6.insets = new Insets(2,180,4,2);
-		gc6.gridx = 3;gc6.gridy = 8;
-		pane4.add(label4,gc6);
-		gc6.gridx = 4;gc6.gridy = 8;
-		pane4.add(priceLabel4,gc6);
-		gc6.gridx = 4;gc6.gridy = 9;
-		pane4.add(typeLabel4,gc6);
-		gc6.gridx = 4;gc6.gridy = 10;
-		pane4.add(categoryLabel4,gc6);
-		gc6.anchor = GridBagConstraints.LAST_LINE_END;
-		gc6.gridx = 8;gc6.gridy = 8;
-		pane4.add(viewDetails4,gc6);
-
-		pane5.setLayout(new GridBagLayout());
-		GridBagConstraints gc7 = new GridBagConstraints();
-		gc7.anchor = GridBagConstraints.LAST_LINE_START;
-		gc7.insets = new Insets(2,180,4,2);
-		gc7.gridx = 3;gc7.gridy = 9;
-		pane5.add(label5,gc7);
-		gc7.gridx = 4;gc7.gridy = 9;
-		pane5.add(priceLabel5,gc7);
-		gc7.gridx = 4;gc7.gridy = 10;
-		pane5.add(typeLabel5,gc7);
-		gc7.gridx = 4;gc7.gridy = 11;
-		pane5.add(categoryLabel5,gc7);
-		gc7.anchor = GridBagConstraints.LAST_LINE_END;
-		gc7.gridx = 8;gc7.gridy = 9;
-		pane5.add(viewDetails5,gc7);
-
-		
+        try {
+            searchTool = new SearchTool(dealer);
+            InventoryManager inventoryManager = new InventoryManager(dealer);
+            inventory= inventoryManager.getInventoryByDealerId(dealer.getId());
+            sortInventory = new SortInventory();
+        }catch (Exception e){
+            System.out.println("Inventory not found");
+        }
+        setUIFont(new FontUIResource("",Font.PLAIN,12));
+        vehicleResult = (List<Vehicle>) inventory.getVehicles();
+        setFilterItems(vehicleResult);
+        setTopPanel();
+        setLeftPanel();
+        vehicleDetailsPane = new JPanel();
+        BoxLayout layout = new BoxLayout(vehicleDetailsPane,BoxLayout.PAGE_AXIS);
+        vehicleDetailsPane.setLayout(layout);
+        vehicleDetailsPane.setBackground(Color.white);
+        vehicleDetailsPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        scrollPane = new JScrollPane(vehicleDetailsPane);
+        container.add(scrollPane);
+        setRightPanel();
+        addListeners();
 	}
-	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable(){
 
-			@Override
-			public void run() {
-				new CustomerVehicleSearchScreen();
+    private void defineFilters() {
 
-			}
 
-		});
+        makeFilter = new JComboBox(makeItems.toArray());
 
-	}
+
+        modelFilter = new JComboBox(modelItems.toArray());
+
+        yearFilter = new JComboBox(yearItems.toArray());
+
+
+        bodyTypeFilter  = new JComboBox(bodyTypeItems.toArray());
+
+        priceFilterItems = new String[]{"0-20000","20000-30000","30000-40000","40000-50000",
+                "50000-60000","60000-70000",">70000"};
+        priceFilter = new JComboBox(priceFilterItems);
+
+        categoryFilter = new JComboBox(categoryItems.toArray());
+
+    }
+
+    private JPanel setVehicleDetailsPanel(Vehicle vehicle){
+
+        vehicleDetailsPanel = new JPanel();
+        try {
+            vehicleImageLabel = new JLabel(Util.getImageFromUrl(vehicle.getPhoto()));
+        }catch (Exception e){
+            vehicleImageLabel = new JLabel(new ImageIcon("data\\noImage.jpg"));
+        }
+        vehicleMake = new JLabel("MAKE: "+vehicle.getMake());
+        vehicleModel = new JLabel("MODEL: "+ vehicle.getModel());
+        vehicleCategory = new JLabel("CATEGORY: "+ vehicle.getCategory());
+        vehicleBodyType = new JLabel("BODY TYPE: "+ vehicle.getBodyType());
+        vehiclePrice = new JLabel("PRICE: "+ vehicle.getPrice());
+        vehicleYear = new JLabel(String.valueOf(vehicle.getYear()));
+        viewDetails = new JButton("VIEW DETAILS");
+        viewDetails.setBackground(Color.RED);
+
+
+        JPanel contentsPanel = new JPanel(new GridLayout(2,3));
+        contentsPanel.add(vehicleYear);
+        contentsPanel.add(vehicleCategory);
+        contentsPanel.add(vehiclePrice);
+        contentsPanel.add(vehicleBodyType);
+        contentsPanel.add(vehicleModel);
+        contentsPanel.add(vehicleMake);
+        contentsPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        contentsPanel.setBackground(Color.cyan);
+        contentsPanel.setPreferredSize(new Dimension(1000,100));
+        contentsPanel.setMaximumSize(new Dimension(1000,100));
+        contentsPanel.setMinimumSize(new Dimension(1000,100));
+
+        vehicleDetailsPanel.add(vehicleImageLabel);
+        vehicleDetailsPanel.add(contentsPanel);
+        vehicleDetailsPanel.add(viewDetails);
+
+        vehicleDetailsPanel.setBackground(Color.LIGHT_GRAY);
+        vehicleDetailsPanel.setBorder(BorderFactory.createEmptyBorder(2,5,2,5));
+
+        vehicleDetailsPanel.setPreferredSize(new Dimension(1500,110));
+        vehicleDetailsPanel.setMaximumSize(new Dimension(1500,110));
+
+        viewDetails.addActionListener(e -> {new VehicleDetailsController(vehicle,dealer);this.dispose();});
+
+        return vehicleDetailsPanel;
+
+
+
+    }
+
+    private void addListeners(){
+
+
+	    modelFilter.addItemListener(new ItemChangeListener());
+
+        makeFilter.addItemListener(new ItemChangeListener());
+
+        bodyTypeFilter.addItemListener(new ItemChangeListener());
+
+        yearFilter.addItemListener(new ItemChangeListener());
+
+	    priceFilter.addItemListener(new ItemChangeListener());
+
+	    categoryFilter.addItemListener(new ItemChangeListener());
+
+	    clearFilters.addActionListener(e -> {
+            vehicleResult = (List<Vehicle>) inventory.getVehicles();
+            clearFilterItems();
+            setFilterItems(vehicleResult);
+            resetFilters();
+            displayResults();
+
+        });
+
+        sort.addActionListener(e -> {
+            if(sort.getSelectedItem().equals("Year ascending")){
+                sortInventory.sortVehiclesByYear(vehicleResult);
+                displayResults();
+            }else if(sort.getSelectedItem().equals("Year descending")){
+                sortInventory.sortVehiclesByYearReverse(vehicleResult);
+                displayResults();
+            }else if(sort.getSelectedItem().equals("Price low to high")){
+                sortInventory.sortVehiclesByPrice(vehicleResult);
+                displayResults();
+            }else if(sort.getSelectedItem().equals("Price high to low")){
+                sortInventory.sortVehiclesByPriceReverse(vehicleResult);
+                displayResults();
+            }
+        });
+
+        Action searchAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e)  {
+                SearchResult result = searchTool.searchByKeyWord((List<Vehicle>) inventory.getVehicles(),
+                        searchBar.getText());
+                vehicleResult = result.getResult();
+                clearFilterItems();
+                setFilterItems(vehicleResult);
+                updateFilters(new JComboBox());
+                displayResults();
+            }
+        };
+
+        searchButton.addActionListener(searchAction);
+
+	    searchBar.addActionListener(searchAction);
+
+	    homeButton.addActionListener(e -> {new MainPage();this.dispose();});
+
+    }
+
+    private void resetFilters(){
+        makeFilter.setEnabled(true);
+        modelFilter.setEnabled(true);
+        bodyTypeFilter.setEnabled(true);
+        priceFilter.setEnabled(true);
+        categoryFilter.setEnabled(true);
+        yearFilter.setEnabled(true);
+
+        modelFilter.setModel(new DefaultComboBoxModel(modelItems.toArray()));
+        makeFilter.setModel(new DefaultComboBoxModel(makeItems.toArray()));
+        yearFilter.setModel(new DefaultComboBoxModel(yearItems.toArray()));
+        bodyTypeFilter.setModel(new DefaultComboBoxModel(bodyTypeItems.toArray()));
+        categoryFilter.setModel(new DefaultComboBoxModel(categoryItems.toArray()));
+        priceFilter.setModel(new DefaultComboBoxModel(priceFilterItems));
+    }
+
+    private void updateFilters(JComboBox filter){
+        if(!filter.equals(modelFilter)){
+            modelFilter.setModel(new DefaultComboBoxModel(modelItems.toArray()));
+        }
+        if(!filter.equals(makeFilter)){
+            makeFilter.setModel(new DefaultComboBoxModel(makeItems.toArray()));
+        }
+        if(!filter.equals(bodyTypeFilter)){
+            bodyTypeFilter.setModel(new DefaultComboBoxModel(bodyTypeItems.toArray()));
+        }
+        if(!filter.equals(yearFilter)){
+            yearFilter.setModel(new DefaultComboBoxModel(yearItems.toArray()));
+        }
+        if(!filter.equals(priceFilter)){
+            priceFilter.setModel(new DefaultComboBoxModel<>(getPriceItems().toArray()));
+        }
+        if(!filter.equals(categoryFilter)){
+            categoryFilter.setModel(new DefaultComboBoxModel(categoryItems.toArray()));
+        }
+    }
+
+    private void clearFilterItems() {
+        modelItems.clear();
+        makeItems.clear();
+        bodyTypeItems.clear();
+        yearItems.clear();
+        priceItems.clear();
+        categoryItems.clear();
+    }
+
+    private void filterListener(JComboBox filter,  Object selectedItem) {
+
+        SearchResult result = searchTool.searchByFilters(vehicleResult, getFiltersForSearchTool(filter, selectedItem));
+        vehicleResult = result.getResult();
+        clearFilterItems();
+        setFilterItems(vehicleResult);
+        updateFilters(filter);
+        displayResults();
+
+    }
+
+    private void displayResults() {
+        vehicleDetailsPane.removeAll();
+
+        if (vehicleResult.isEmpty()) {
+            JPanel messagePanel = new JPanel(new GridBagLayout());
+            messagePanel.add(new JLabel("NO RESULTS FOUND"));
+            messagePanel.setPreferredSize(new Dimension(1600, 40));
+            messagePanel.setMaximumSize(new Dimension(1600, 40));
+            messagePanel.setMinimumSize(new Dimension(1600, 40));
+            messagePanel.setBackground(Color.GRAY);
+            vehicleDetailsPane.add(messagePanel);
+        } else {
+            setRightPanel();
+        }
+        vehicleDetailsPane.updateUI();
+    }
+
+    private ArrayList<Filter> getFiltersForSearchTool(JComboBox filter, Object selectedItem) {
+
+        ArrayList<Filter> filters = new ArrayList<>();
+
+        if (filter.equals(priceFilter)) {
+            String temp[] = getPriceValues((String) selectedItem);
+            filters.add(new RangeFilter("price", Float.valueOf(temp[0]), Float.valueOf(temp[1])));
+            getFilterName(filter);
+
+        }else {
+            filters.add(new LiteralFilter(getFilterName(filter), selectedItem));
+        }
+
+        return filters;
+
+    }
+
+    private String getFilterName(JComboBox filter){
+        if(filter.equals(makeFilter)){
+            makeFilter.setEnabled(false);
+            return "make";
+        }else if(filter.equals(modelFilter)){
+            modelFilter.setEnabled(false);
+            return "model";
+        }else if(filter.equals(bodyTypeFilter)){
+            bodyTypeFilter.setEnabled(false);
+            return "bodyType";
+        }else if(filter.equals(yearFilter)){
+            yearFilter.setEnabled(false);
+            return "year";
+        }else if(filter.equals(priceFilter)){
+            priceFilter.setEnabled(false);
+            return "price";
+        }else if(filter.equals(categoryFilter)){
+            categoryFilter.setEnabled(false);
+            return "category";
+        }
+        return null;
+    }
+
+    private String[] getPriceValues(String priceValue) {
+
+        String[] prices = new String[2];
+
+        if (priceValue.contains(">")) {
+            prices[0] = "70000";
+            prices[1] = String.valueOf(Double.POSITIVE_INFINITY);
+        } else {
+            prices = priceValue.split("-");
+        }
+
+        return prices;
+    }
+
+    private void setFilterItems(List<Vehicle> vehicles) {
+        vehicles.forEach(vehicle -> {
+            makeItems.add(vehicle.getMake());
+            modelItems.add(vehicle.getModel());
+            bodyTypeItems.add(vehicle.getBodyType());
+            yearItems.add(String.valueOf(vehicle.getYear()));
+            priceItems.add(vehicle.getPrice());
+            categoryItems.add(vehicle.getCategory().toString());
+        });
+    }
+
+    private TreeSet<String> getPriceItems(){
+        TreeSet<String> result = new TreeSet<>();
+
+        priceItems.forEach(item -> {
+            if(item <= 20000){
+                result.add(priceFilterItems[0]);
+            }else if(item>20000 && item <= 30000){
+                result.add(priceFilterItems[1]);
+            }else if(item>30000 && item <= 40000){
+                result.add(priceFilterItems[2]);
+            }else if(item>40000 && item<= 50000){
+                result.add(priceFilterItems[3]);
+            }else if(item>50000 && item <= 60000){
+                result.add(priceFilterItems[4]);
+            }else if(item>60000 && item <=70000){
+                result.add(priceFilterItems[5]);
+            }else {
+                result.add(priceFilterItems[6]);
+            }
+        });
+
+        return result;
+    }
+
+    private class ItemChangeListener implements ItemListener {
+
+        private void setAction(JComboBox selectedFilter, String selectedItem){
+            if(selectedFilter.equals(makeFilter)){
+                filterListener(makeFilter,selectedItem);
+            }else if(selectedFilter.equals(modelFilter)){
+                filterListener(modelFilter, selectedItem);
+            }else if(selectedFilter.equals(bodyTypeFilter)){
+                filterListener(bodyTypeFilter ,selectedItem);
+            }else if(selectedFilter.equals(yearFilter)){
+                filterListener(yearFilter, Integer.valueOf(selectedItem));
+            }else if(selectedFilter.equals(priceFilter)){
+                filterListener(priceFilter, selectedItem);
+            }else if(selectedFilter.equals(categoryFilter)){
+                filterListener(categoryFilter,Category.valueOf(selectedItem));
+            }
+        }
+
+        private Object getValueForFilter(JComboBox selectedFilter,String selectedItem){
+            if(selectedFilter.equals(categoryFilter)){
+                return Category.valueOf(selectedItem);
+            }else if(selectedFilter.equals(priceFilter)){
+                return Float.valueOf(selectedItem);
+            }else if(selectedFilter.equals(yearFilter)){
+                return Integer.valueOf(selectedItem);
+            }else {
+                return selectedItem;
+            }
+        }
+        @Override
+        public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() == ItemEvent.SELECTED && listenerFlag) {
+                listenerFlag = false;
+                JComboBox selectedFilter = (JComboBox) event.getSource();
+                String selectedItem =  (String)event.getItem();
+
+                setAction(selectedFilter, selectedItem);
+                SwingUtilities.invokeLater(()->listenerFlag = true);
+            }
+
+        }
+    }
+
+    private void setUIFont(FontUIResource f)
+    {
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while(keys.hasMoreElements())
+        {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if(value instanceof FontUIResource)
+                UIManager.put(key, f);
+
+        }
+    }
+
+
 }
