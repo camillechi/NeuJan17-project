@@ -21,26 +21,23 @@ public class AddVehicle extends JFrame {
     private JButton clearButton, confirmButton;
 
     public AddVehicle(InventoryManagementScreen parent) {
-        createComponents1(parent);
+    	initialize(parent);
         addComponents();
         createLayout();
         display();
     }
 
     public AddVehicle(InventoryManagementScreen parent, Vehicle vehicle, int row) {
-        createComponents2(parent, vehicle, row);
+    	initialize(parent, vehicle, row);
         addComponents();
         createLayout();
         display();
     }
 
-    @SuppressWarnings("static-access")
-    public void createComponents1(InventoryManagementScreen parent) {
-
-        panel = new JPanel();
+    public void createComponents(){
+    	panel = new JPanel();
         headPanel = new JPanel();
         bottomPanel = new JPanel();
-
         headline = new JLabel("ADD VEHICLE");
         idLabel = new JLabel("ID");
         webIdLabel = new JLabel("WebId");
@@ -52,7 +49,6 @@ public class AddVehicle extends JFrame {
         typeLabel = new JLabel("BodyType");
         priceLabel = new JLabel("Price");
         photoLabel = new JLabel("Photo URL");
-
         idText = new JTextField(5);
         webIdText = new JTextField(5);
         yearText = new JTextField(5);
@@ -62,9 +58,25 @@ public class AddVehicle extends JFrame {
         typeText = new JTextField(5);
         priceText = new JTextField(5);
         photoText = new JTextField(5);
-
         categoryCB = new JComboBox<Category>(category.values());
+    }
+    
+    public void setDefalt(Vehicle vehicle){
+    	idText.setText(vehicle.getId());
+        webIdText.setText(vehicle.getWebId());
+        yearText.setText(String.valueOf(vehicle.getYear()));
+        makeText.setText(vehicle.getMake());
+        modelText.setText(vehicle.getModel());
+        trimText.setText(vehicle.getTrim());
+        typeText.setText(vehicle.getBodyType());
+        priceText.setText(String.valueOf(vehicle.getPrice()));
+        photoText.setText(vehicle.getPhoto());
+        categoryCB.setSelectedItem(vehicle.getCategory());
+    }
+    
+    public void initialize(InventoryManagementScreen parent) {
 
+        createComponents();
         clearButton = new JButton("Clear");
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -94,45 +106,10 @@ public class AddVehicle extends JFrame {
         });
     }
 
-    public void createComponents2(InventoryManagementScreen parent, Vehicle vehicle, int row) {
+    public void initialize(InventoryManagementScreen parent, Vehicle vehicle, int row) {
 
-        panel = new JPanel();
-        headPanel = new JPanel();
-        bottomPanel = new JPanel();
-
-        headline = new JLabel("EDIT VEHICLE");
-        idLabel = new JLabel("ID");
-        webIdLabel = new JLabel("WebId");
-        categoryLabel = new JLabel("Category");
-        yearLabel = new JLabel("Year");
-        makeLabel = new JLabel("Make");
-        modelLabel = new JLabel("Model");
-        trimLabel = new JLabel("Trim");
-        typeLabel = new JLabel("BodyType");
-        priceLabel = new JLabel("Price");
-        photoLabel = new JLabel("Photo URL");
-
-        idText = new JTextField(5);
-        idText.setText(vehicle.getId());
-        webIdText = new JTextField(5);
-        webIdText.setText(vehicle.getWebId());
-        yearText = new JTextField(5);
-        yearText.setText(String.valueOf(vehicle.getYear()));
-        makeText = new JTextField(5);
-        makeText.setText(vehicle.getMake());
-        modelText = new JTextField(5);
-        modelText.setText(vehicle.getModel());
-        trimText = new JTextField(5);
-        trimText.setText(vehicle.getTrim());
-        typeText = new JTextField(5);
-        typeText.setText(vehicle.getBodyType());
-        priceText = new JTextField(5);
-        priceText.setText(String.valueOf(vehicle.getPrice()));
-        photoText = new JTextField(5);
-        photoText.setText(vehicle.getPhoto());
-
-        categoryCB = new JComboBox<Category>(category.values());
-        categoryCB.setSelectedItem(vehicle.getCategory());
+    	createComponents();
+        setDefalt(vehicle);
 
         clearButton = new JButton("Delete");
         clearButton.addActionListener(new ActionListener() {
@@ -157,8 +134,7 @@ public class AddVehicle extends JFrame {
     }
 
     public void addComponents() {
-
-
+    	
         headPanel.add(headline);
         panel.add(idLabel);
         panel.add(idText);
@@ -224,6 +200,7 @@ public class AddVehicle extends JFrame {
             }
         }
     }
+    
 
     public void display() {
 
