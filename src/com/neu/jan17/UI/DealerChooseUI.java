@@ -15,7 +15,7 @@ public class DealerChooseUI extends JFrame {
     private JLabel headline, dealerNameLabel;
     private JComboBox dealerItem;
     private JButton selectDealer;
-    public static String getDealerID = null;
+    private static String getDealerID = null;
     private JPanel dealerChooseUI;
 
 
