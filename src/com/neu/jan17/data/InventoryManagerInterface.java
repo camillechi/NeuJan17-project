@@ -30,8 +30,8 @@ public interface InventoryManagerInterface {
     /**
      * Update inventory file.
      *
-     * @param dealer      inventory of the dealer to be saved
+     * @param inventory      inventory of the dealer to be saved
      * @throws IOException
      */
-    void updateInventoryToFile(Dealer dealer) throws Exception;
+    void updateInventoryToFile(Inventory inventory) throws Exception;
 }

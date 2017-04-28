@@ -125,16 +125,16 @@ public class InventoryManager implements InventoryManagerInterface {
     /**
      * {@inheritDoc}
      */
-    public void updateInventoryToFile(Dealer dealer) throws Exception {
+    public void updateInventoryToFile(Inventory inventory) throws Exception {
 
         String vehicleDetails = "id~webId~category~year~make~model~trim~type~price\n";
         StringBuilder stringBuilder = new StringBuilder();
-        for (Vehicle vehicle : inventoryMap.get(dealer.getId()).getVehicles()) {
+        for (Vehicle vehicle : inventoryMap.get(inventory.getDealerId()).getVehicles()) {
             stringBuilder.append(vehicle.toString()).append("\n");
         }
         vehicleDetails = vehicleDetails+ stringBuilder.toString();
         // dealerId is the Inventory file name
-        String inventoryFilePath = dealerFolderPathMap.get(dealer.getId()).getAbsolutePath();
+        String inventoryFilePath = dealerFolderPathMap.get(inventory.getDealerId()).getAbsolutePath();
         Util.writeToFile(inventoryFilePath, vehicleDetails,false);
     }
 
