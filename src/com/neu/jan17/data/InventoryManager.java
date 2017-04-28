@@ -12,8 +12,8 @@ public class InventoryManager implements InventoryManagerInterface {
 
 
     public InventoryManager(Dealer dealer) throws FileNotFoundException {
-        this.readInventoryFolder("data");
-        inventoryMap.put(dealer.getId(),getInventoryByDealerId(dealer.getId()));
+        this.mapFilesToDealers("data");
+        inventoryMap.put(dealer.getId(),getInventoryFromFile(dealerFolderPathMap.get(dealer.getId())));
     }
 
     /**
@@ -22,7 +22,7 @@ public class InventoryManager implements InventoryManagerInterface {
      * @param folderPath path to the directory of your data folder
      * @throws FileNotFoundException throws exception if there are no files in given directory
      */
-    private void readInventoryFolder(String folderPath) throws FileNotFoundException {
+    private void mapFilesToDealers(String folderPath) throws FileNotFoundException {
         File folder = new File(folderPath);
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.isFile()) {
@@ -96,14 +96,7 @@ public class InventoryManager implements InventoryManagerInterface {
      * {@inheritDoc}
      */
     public Inventory getInventoryByDealerId(String dealerId) {
-        Inventory inventory = new Inventory();
-        try {
-             inventory = getInventoryFromFile(dealerFolderPathMap.get(dealerId));
-        }catch (FileNotFoundException e){
-            System.out.println("File associated to the dealer is not found");
-        }
-
-        return inventory;
+        return inventoryMap.get(dealerId);
     }
 
     /**
@@ -145,8 +138,6 @@ public class InventoryManager implements InventoryManagerInterface {
     public Map<String, Inventory> getInventoryMap() {
         return inventoryMap;
     }
-
-
 
 
 
