@@ -33,7 +33,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
         }
         dealerItem = new JComboBox(dealerID);
 
-<<<<<<< HEAD
+
         JButton selectDealer = new JButton("Confirm");
         JButton backButton = new JButton("Back");
         backButton.addActionListener(this);
@@ -49,7 +49,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
 //                // redirect to team two page
 //            }
 //        });
-=======
+
         selectDealer = new JButton("Confirm");
         selectDealer.addActionListener(new ActionListener() {
             @Override
@@ -61,7 +61,7 @@ public class DealerChooseUI extends JFrame implements ActionListener {
                 CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen();
             }
         });
->>>>>>> origin/master
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(dealerNameLabel);
