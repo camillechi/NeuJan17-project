@@ -36,12 +36,14 @@ class MainPage extends JFrame implements ActionListener {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setTitle("Vehicle Management");
-        setSize(1000, 500);
+        setSize(1500, 1500);
+//        setSize(1000, 500);
         customerButton.addActionListener(this);
         customerButton.setActionCommand("Customer");
         dealerButton.addActionListener(this);
         dealerButton.setActionCommand("Dealers");
         this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     public void actionPerformed(ActionEvent e) {

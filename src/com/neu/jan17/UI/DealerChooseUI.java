@@ -1,6 +1,7 @@
 package com.neu.jan17.UI;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 
 import com.neu.jan17.data.*;
 
@@ -9,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class DealerChooseUI extends JFrame {
+public class DealerChooseUI extends JFrame implements ActionListener {
 
     private JPanel bottomPanel;
     private JLabel headline, dealerNameLabel;
@@ -23,7 +24,7 @@ public class DealerChooseUI extends JFrame {
 
         headline = new JLabel("Dealer Choose");
 
-        dealerNameLabel = new JLabel("Please choose a dealer:");
+        dealerNameLabel = new JLabel("Choose your dealer:");
 
         DealerData dd = new DealerData();
         String[] dealerID = new String[dd.getDealersData().length];
@@ -32,6 +33,23 @@ public class DealerChooseUI extends JFrame {
         }
         dealerItem = new JComboBox(dealerID);
 
+<<<<<<< HEAD
+        JButton selectDealer = new JButton("Confirm");
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(this);
+        backButton.setActionCommand("Back");
+        selectDealer.addActionListener(this);
+        selectDealer.setActionCommand("Confirm");
+//        
+//        selectDealer.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                getDealerID += "gmps-" + dealerItem.getSelectedItem();
+//                // add your code here.
+//                // redirect to team two page
+//            }
+//        });
+=======
         selectDealer = new JButton("Confirm");
         selectDealer.addActionListener(new ActionListener() {
             @Override
@@ -43,15 +61,25 @@ public class DealerChooseUI extends JFrame {
                 CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen();
             }
         });
+>>>>>>> origin/master
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(dealerNameLabel);
         bottomPanel.add(dealerItem);
         bottomPanel.add(selectDealer);
+        bottomPanel.add(backButton);
+        bottomPanel.setBackground(new Color(235,245,251));
         add(bottomPanel);
+//        setSize(200, 400);
+        setSize(1500,1500);
         setVisible(true);
-        setSize(200, 400);
 
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    }
+
+    public String getDealerID(){
+        return getDealerID;
     }
 
     public String getDealerID(){
@@ -61,4 +89,20 @@ public class DealerChooseUI extends JFrame {
     public static void main(String[] args) {
         DealerChooseUI dealerChooseUI = new DealerChooseUI();
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton backButton = (JButton) e.getSource();
+		JButton selectDealer = (JButton)e.getSource();
+        if (e.getActionCommand().equals("Back")) {
+            // redirect to the main page
+//        	DealerChooseUI().setVisible(false);
+//            dispose();
+            com.neu.jan17.UI.MainPage mainPage = new MainPage();
+            mainPage.setVisible(true);
+        } else if (e.getActionCommand().equals("Confirm")) {
+            // redirect to team 2's page
+        }
+		
+	}
 }
