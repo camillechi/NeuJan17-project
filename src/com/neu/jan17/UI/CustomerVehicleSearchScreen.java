@@ -96,7 +96,7 @@ public class CustomerVehicleSearchScreen extends CustomerVehicleSearchScreenData
     @Override
 	public void setTopPanel() {
 
-	    topPicture = new JLabel(new ImageIcon("D:\\vehicleImage.jpg"));
+	    topPicture = new JLabel(new ImageIcon("data\\vehicleImage.jpg"));
 
 	    homeButton = new JButton("HOME");
 
@@ -140,7 +140,7 @@ public class CustomerVehicleSearchScreen extends CustomerVehicleSearchScreenData
         }catch (Exception e){
             System.out.println("Inventory not found");
         }
-        setUIFont(new FontUIResource("",Font.PLAIN,12));
+        Util.setUIFont(new FontUIResource("",Font.PLAIN,12));
         vehicleResult = (List<Vehicle>) inventory.getVehicles();
         setFilterItems(vehicleResult);
         setTopPanel();
@@ -493,18 +493,7 @@ public class CustomerVehicleSearchScreen extends CustomerVehicleSearchScreenData
         }
     }
 
-    private void setUIFont(FontUIResource f)
-    {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
-        while(keys.hasMoreElements())
-        {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if(value instanceof FontUIResource)
-                UIManager.put(key, f);
 
-        }
-    }
 
 
 }

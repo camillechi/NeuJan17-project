@@ -1,6 +1,7 @@
 package com.neu.jan17.UI;
 
 import com.neu.jan17.data.Dealer;
+import com.neu.jan17.data.Util;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -12,7 +13,7 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
 
     public VehicleDetailsView(Dealer dealer){
         this.dealer = dealer;
-        setUIFont(new FontUIResource("Arial",Font.PLAIN,20));
+        Util.setUIFont(new FontUIResource("Arial",Font.PLAIN,20));
         createFrame();
 
     }
@@ -162,18 +163,7 @@ public class VehicleDetailsView extends VehicleDetailsViewerData{
     }
 
 
-    private void setUIFont(FontUIResource f)
-    {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
-        while(keys.hasMoreElements())
-        {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if(value instanceof FontUIResource)
-                UIManager.put(key, f);
 
-        }
-    }
 
 
 }

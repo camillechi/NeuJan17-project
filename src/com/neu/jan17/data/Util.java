@@ -3,6 +3,7 @@ package com.neu.jan17.data;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,5 +57,18 @@ public class Util {
         URL url = new URL(urlPath);
         return new ImageIcon(ImageIO.read(url));
 
+    }
+
+    public static void setUIFont(FontUIResource f)
+    {
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while(keys.hasMoreElements())
+        {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if(value instanceof FontUIResource)
+                UIManager.put(key, f);
+
+        }
     }
 }
