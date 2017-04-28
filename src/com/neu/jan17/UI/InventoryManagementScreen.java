@@ -2,132 +2,45 @@ package com.neu.jan17.UI;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import com.neu.jan17.data.*;
+import javafx.beans.binding.ObjectExpression;
+import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Vector;
+import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class InventoryManagementScreen extends JFrame {
 
-
-    private JPanel totalPanel;
-    private JPanel topPanel, midPanel, bottomPanel;
+    private JPanel topPanel, midPanel, rightPanel, bottomPanel;
+    private dealerModel dm;
     private JTable inventoryData;
     private JScrollPane inventoryPane;
-    private JLabel headline, dealerNameLabel;
+    private JCheckBox cb;
+    private JLabel dealerNameLabel;
     private JComboBox dealerItem;
     private JButton selectDealer;
     private JButton addButton;
+    private JButton deleteButton;
     private JButton updateButton;
+    private JButton selectAllButton;
+    private JButton clearAllButton;
+    private JButton deleteConfirmButton;
+    private JButton cancelButton;
 
     protected Vehicles ve;
 
     public InventoryManagementScreen() {
 
-        headline = new JLabel("Inventory Management");
-
-        Vector<Vehicle> vehicleData = new Vector<>();
-
-        dealerNameLabel = new JLabel("Please choose a dealer:");
-
-        DealerData dd = new DealerData();
-        String[] dealerID = new String[dd.getDealersData().length];
-        for (int i = 0; i < dd.getDealersData().length; i++) {
-            dealerID[i] = dd.getDealersData()[i].getId().substring(5, dd.getDealersData()[i].getId().length());
-        }
-        dealerItem = new JComboBox(dealerID);
-
-        ve = new Vehicles();
-
-        inventoryData = new JTable(new dealerModel(ve));
-        inventoryData.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int row = ((JTable) e.getSource()).rowAtPoint(e.getPoint());
-                    openEditUI(ve.showData(row), row);
-                } else {
-                    return;
-                }
-            }
-        });
-        inventoryData.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        resizeColumnWidth(inventoryData);
-        inventoryPane = new JScrollPane(inventoryData);
-
-        selectDealer = new JButton("Confirm");
-        selectDealer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String getDealerID = "";
-                getDealerID += "gmps-" + dealerItem.getSelectedItem();
-                try {
-                    ve.removeAll();
-                    for (Vehicle v : getVehicle(getDealerID).getVehicles()) {
-                        ve.addData(v);
-                    }
-                    repaint();
-                } catch (Exception unknowne) {
-                }
-            }
-        });
-        addButton = new JButton("  Add  ");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openAddUI();
-            }
-        });
-        updateButton = new JButton("Update");
-
-        topPanel = new JPanel();
-        midPanel = new JPanel();
-        bottomPanel = new JPanel();
-
-        topPanel.add(dealerNameLabel);
-        topPanel.add(dealerItem);
-        topPanel.add(selectDealer);
-        midPanel.add(inventoryPane);
-        bottomPanel.add(addButton);
-        bottomPanel.add(updateButton);
-
-        Font f1 = new Font("Meiryo UI", Font.PLAIN, 15);
-        Font f2 = new Font("Meiryo UI", Font.PLAIN, 18);
-        Font f3 = new Font("Meiryo UI", Font.PLAIN, 20);
-        inventoryData.setRowHeight(25);
-        inventoryData.setAutoCreateRowSorter(true);
-        //inventoryData.setGridColor(Color.BLUE);
-        Dimension tableSize = new Dimension(700, 600);
-        inventoryPane.setPreferredSize(tableSize);
-
-        Container con = getContentPane();
-        setLayout(new BorderLayout(2, 2));
-        con.add("North", topPanel);
-        con.add("Center", midPanel);
-        con.add("South", bottomPanel);
-
-        topPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
-        midPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 20, 50));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 50, 0));
-
-        changeFont(con, f2);
-        //dealerNameLabel.setFont(f2);
-        addButton.setFont(f3);
-        updateButton.setFont(f3);
-        Dimension boxsize = new Dimension(150, 30);
-        dealerItem.setPreferredSize(boxsize);
-
-        setVisible(true);
-        setSize(900, 900);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        createComponent();
+        createLayout();
+        addListener();
+        init();
 
     }
 
@@ -170,31 +83,328 @@ public class InventoryManagementScreen extends JFrame {
         }
     }
 
+    public void createComponent() {
+
+        dealerNameLabel = new JLabel("Please choose a dealer:");
+        dealerItem = new JComboBox(generateDealerInformation());
+
+        ve = new Vehicles();
+        dm = new dealerModel(ve);
+        inventoryData = new JTable(dm);
+        inventoryData.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        resizeColumnWidth(inventoryData);
+        setHorizontal(inventoryData);
+        inventoryPane = new JScrollPane(inventoryData);
+
+        selectDealer = new JButton("Confirm");
+        addButton = new JButton("Add");
+        deleteButton = new JButton("Delete");
+        updateButton = new JButton("Update");
+        selectAllButton = new JButton("Select All");
+        clearAllButton = new JButton("Clear All");
+        deleteConfirmButton = new JButton("Confirm");
+        cancelButton = new JButton("Cancel");
+
+        topPanel = new JPanel();
+        midPanel = new JPanel();
+        rightPanel = new JPanel();
+        bottomPanel = new JPanel();
+    }
+
+    public void createLayout() {
+
+        topPanel.add(dealerNameLabel);
+        topPanel.add(dealerItem);
+        topPanel.add(selectDealer);
+        midPanel.add(inventoryPane);
+        rightPanel.add(addButton);
+        rightPanel.add(deleteButton);
+        rightPanel.add(updateButton);
+        bottomPanel.add(selectAllButton);
+        bottomPanel.add(clearAllButton);
+        bottomPanel.add(deleteConfirmButton);
+        bottomPanel.add(cancelButton);
+
+        Font f1 = new Font("Meiryo UI", Font.PLAIN, 15);
+        Font f2 = new Font("Meiryo UI", Font.PLAIN, 18);
+        Font f3 = new Font("Meiryo UI", Font.PLAIN, 20);
+        inventoryData.setRowHeight(25);
+        inventoryData.setAutoCreateRowSorter(true);
+        //inventoryData.setGridColor(Color.BLUE);
+        Dimension tableSize = new Dimension(700, 600);
+        inventoryPane.setPreferredSize(tableSize);
+
+        Container con = getContentPane();
+        setLayout(new BorderLayout(2, 2));
+        con.add("North", topPanel);
+        con.add("Center", midPanel);
+        con.add("East", rightPanel);
+        con.add("South", bottomPanel);
+        //bottomPanel.setVisible(false);
+
+        topPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
+        midPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 20, 50));
+        rightPanel.setLayout(new GridLayout(20, 1));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 50, 0));
+        bottomPanel.setVisible(false);
+
+        changeFont(con, f2);
+        //dealerNameLabel.setFont(f2);
+        addButton.setFont(f3);
+        updateButton.setFont(f3);
+        Dimension boxsize = new Dimension(150, 30);
+        dealerItem.setPreferredSize(boxsize);
+
+    }
+
+    public void addListener() {
+
+        inventoryData.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = ((JTable) e.getSource()).rowAtPoint(e.getPoint());
+                    openEditUI(ve.showData(row), row);
+                } else {
+                    return;
+                }
+            }
+        });
+
+        selectDealer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String getDealerID = "";
+                getDealerID += "gmps-" + dealerItem.getSelectedItem();
+                try {
+                    ve.removeAll();
+                    for (Vehicle v : getVehicle(getDealerID).getVehicles()) {
+                        ve.addData(v);
+                    }
+                    repaint();
+                } catch (Exception unknowne) {
+                }
+            }
+        });
+
+        MouseListener ml = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    int row = ((JTable) e.getSource()).rowAtPoint(e.getPoint());
+                    ve.changeStatus(row);
+                    repaint();
+                }
+            }
+        };
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteButton.setEnabled(false);
+                addButton.setEnabled(false);
+                updateButton.setEnabled(false);
+                dm.setHeader();
+                ve.clearAllStatus();
+                bottomPanel.setVisible(true);
+                inventoryData.addMouseListener(ml);
+                repaint();
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openAddUI();
+            }
+        });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    saveData();
+                }catch (Exception e1){
+
+                }
+            }
+        });
+
+        selectAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ve.selectAllStatus();
+                repaint();
+            }
+        });
+
+        clearAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ve.clearAllStatus();
+                repaint();
+            }
+        });
+
+        deleteConfirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteButton.setEnabled(true);
+                addButton.setEnabled(true);
+                updateButton.setEnabled(true);
+                ve.clearSelectVehicle();
+                dm.setHeader();
+                bottomPanel.setVisible(false);
+                inventoryData.removeMouseListener(ml);
+                repaint();
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteButton.setEnabled(true);
+                addButton.setEnabled(true);
+                updateButton.setEnabled(true);
+                dm.setHeader();
+                repaint();
+                bottomPanel.setVisible(false);
+                inventoryData.removeMouseListener(ml);
+            }
+        });
+    }
+
+    public void setHorizontal(JTable table){
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+
+        r.setHorizontalAlignment(JLabel.CENTER);
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class, r);
+        table.getTableHeader().setDefaultRenderer(hr);
+    }
+
+    public void saveData() throws Exception{
+        InventoryManager im = new InventoryManager("data");
+        Inventory inventory = new Inventory();
+
+        inventory.setVehicles(ve.updateVehicle());
+        String getDealerID = "";
+        getDealerID += "gmps-" + dealerItem.getSelectedItem();
+        inventory.setDealerId(getDealerID);
+        im.updateInventoryToFile(inventory);
+    }
+
+    public void init() {
+
+        setVisible(true);
+        setSize(900, 900);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    public String[] generateDealerInformation() {
+
+        DealerData dd = new DealerData();
+        String[] dealerID = new String[dd.getDealersData().length];
+        for (int i = 0; i < dd.getDealersData().length; i++) {
+            dealerID[i] = dd.getDealersData()[i].getId().substring(5, dd.getDealersData()[i].getId().length());
+        }
+
+        return dealerID;
+
+    }
+
     class Vehicles {
 
-        Vector<Vehicle> data = new Vector<>();
+        //Vector<Vehicle> data = new Vector<>();
+        Vector<Object[]> comboData = new Vector<>();
 
         Vehicles() {
         }
 
         public void addData(Vehicle vehicle) {
-            data.add(vehicle);
+            Object[] temp = {false, vehicle};
+            comboData.add(temp);
+            //data.add(vehicle);
+        }
+
+        public int getRows() {
+            return comboData.size();
         }
 
         public Vehicle showData(int row) {
-            return data.get(row);
+            return (Vehicle) comboData.get(row)[1];
         }
 
         public void removeData(int row) {
-            data.remove(row);
+            //data.remove(row);
+            comboData.remove(row);
         }
 
         public void removeAll() {
-            data.removeAllElements();
+            //data.removeAllElements();
+            comboData.removeAllElements();
         }
 
         public void changeData(int row, Vehicle vehicle) {
-            data.set(row, vehicle);
+            //data.set(row, vehicle);
+            Object[] temp = {false, vehicle};
+            comboData.set(row, temp);
+        }
+
+        public Object showStatus(int row) {
+            return comboData.get(row)[0];
+        }
+
+        public void changeStatus(int row) {
+            if (comboData.get(row)[0].equals(false)) {
+                Object[] temp = {true, comboData.get(row)[1]};
+                comboData.set(row, temp);
+            } else {
+                Object[] temp = {false, comboData.get(row)[1]};
+                comboData.set(row, temp);
+            }
+        }
+
+        public void selectAllStatus() {
+            for (int i = 0; i < comboData.size(); i++) {
+                if (comboData.get(i)[0].equals(false)) {
+                    Object[] temp = {true, comboData.get(i)[1]};
+                    comboData.set(i, temp);
+                }
+            }
+        }
+
+        public void clearAllStatus() {
+            for (int i = 0; i < comboData.size(); i++) {
+                if (comboData.get(i)[0].equals(true)) {
+                    Object[] temp = {false, comboData.get(i)[1]};
+                    comboData.set(i, temp);
+                }
+            }
+        }
+
+        public void clearSelectVehicle() {
+            int i = 0;
+            while (i < comboData.size()) {
+                if (comboData.get(i)[0].equals(true)) {
+                    comboData.remove(i);
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        public ArrayList<Vehicle> updateVehicle(){
+            Inventory inventory = new Inventory();
+            ArrayList<Vehicle> a = new ArrayList<>();
+
+            for (Object[] o:comboData){
+                a.add((Vehicle)o[1]);
+            }
+
+            return a;
         }
 
     }
@@ -209,29 +419,49 @@ public class InventoryManagementScreen extends JFrame {
         }
 
         public int getRowCount() {
-            return vehicle.data.size();
+            return vehicle.comboData.size();
         }
 
         public int getColumnCount() {
-            return 7;
+            return name.length;
         }
 
         public Object getValueAt(int row, int col) {
             Vehicle veh = vehicle.showData(row);
-            if (col == 0) {
-                return veh.getId();
-            } else if (col == 1) {
-                return veh.getCategory();
-            } else if (col == 2) {
-                return veh.getYear();
-            } else if (col == 3) {
-                return veh.getMake();
-            } else if (col == 4) {
-                return veh.getModel();
-            } else if (col == 5) {
-                return veh.getBodyType();
+            if (name.length == 8) {
+                if (col == 1) {
+                    return veh.getId();
+                } else if (col == 2) {
+                    return veh.getCategory();
+                } else if (col == 3) {
+                    return veh.getYear();
+                } else if (col == 4) {
+                    return veh.getMake();
+                } else if (col == 5) {
+                    return veh.getModel();
+                } else if (col == 6) {
+                    return veh.getBodyType();
+                } else if (col == 7) {
+                    return veh.getPrice();
+                } else {
+                    return vehicle.showStatus(row);
+                }
             } else {
-                return veh.getPrice();
+                if (col == 0) {
+                    return veh.getId();
+                } else if (col == 1) {
+                    return veh.getCategory();
+                } else if (col == 2) {
+                    return veh.getYear();
+                } else if (col == 3) {
+                    return veh.getMake();
+                } else if (col == 4) {
+                    return veh.getModel();
+                } else if (col == 5) {
+                    return veh.getBodyType();
+                } else {
+                    return veh.getPrice();
+                }
             }
         }
 
@@ -240,20 +470,39 @@ public class InventoryManagementScreen extends JFrame {
         }
 
         public Class getColumnClass(int c) {
-            return String.class;
+            return getValueAt(0, c).getClass();
         }
 
         public boolean isCellEditable(int row, int col) {
             return false;
         }
 
-        public void setValueAt(String aValue, int row, int col) {
-
+        public void setHeader() {
+            if (name.length == 7) {
+                String[] temp = {"Status", "Id", "Category", "Year", "Make", "Model", "Bodytype", "Price"};
+                name = temp;
+                inventoryData.getColumnModel().getColumn(0).setHeaderValue("Status");
+                inventoryData.getColumnModel().getColumn(1).setHeaderValue("Id");
+                inventoryData.getColumnModel().getColumn(2).setHeaderValue("Category");
+                inventoryData.getColumnModel().getColumn(3).setHeaderValue("Year");
+                inventoryData.getColumnModel().getColumn(4).setHeaderValue("Make");
+                inventoryData.getColumnModel().getColumn(5).setHeaderValue("Model");
+                inventoryData.getColumnModel().getColumn(6).setHeaderValue("Bodytype");
+            } else {
+                String[] temp = {"Id", "Category", "Year", "Make", "Model", "Bodytype", "Price"};
+                name = temp;
+                inventoryData.getColumnModel().getColumn(0).setHeaderValue("Id");
+                inventoryData.getColumnModel().getColumn(1).setHeaderValue("Category");
+                inventoryData.getColumnModel().getColumn(2).setHeaderValue("Year");
+                inventoryData.getColumnModel().getColumn(3).setHeaderValue("Make");
+                inventoryData.getColumnModel().getColumn(4).setHeaderValue("Model");
+                inventoryData.getColumnModel().getColumn(5).setHeaderValue("Bodytype");
+                inventoryData.getColumnModel().getColumn(6).setHeaderValue("Price");
+            }
         }
     }
 
     public static void main(String[] args) {
-
 
         new InventoryManagementScreen();
     }
