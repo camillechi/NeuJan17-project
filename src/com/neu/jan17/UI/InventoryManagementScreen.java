@@ -7,24 +7,25 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import com.neu.jan17.data.*;
-import javafx.beans.binding.ObjectExpression;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.List;
 
 public class InventoryManagementScreen extends JFrame {
 
-    private JPanel topPanel, midPanel, rightPanel, bottomPanel;
+    private JPanel topPanel, midPanel, leftPanel, rightPanel, bottomPanel;
     private dealerModel dm;
     private JTable inventoryData;
     private JScrollPane inventoryPane;
     private JCheckBox cb;
-    private JLabel dealerNameLabel;
-    private JComboBox dealerItem;
+    private JLabel dealerNameLabel, dealerCategory, dealerYear, dealerMake, dealerModel, dealerBodytype;
+    private JComboBox dealerItem, dealerCategorys, dealerYears, dealerMakes, dealerModels, dealerBodytypes;
     private JButton selectDealer;
+    private JButton searchVehicle;
+    private JButton filterButton;
     private JButton addButton;
     private JButton deleteButton;
     private JButton updateButton;
@@ -32,8 +33,10 @@ public class InventoryManagementScreen extends JFrame {
     private JButton clearAllButton;
     private JButton deleteConfirmButton;
     private JButton cancelButton;
+    private JButton cancel2Button;
 
     protected Vehicles ve;
+    protected Vehicles backup;
 
     public InventoryManagementScreen() {
 
@@ -45,7 +48,9 @@ public class InventoryManagementScreen extends JFrame {
     }
 
     public Inventory getVehicle(String id) throws Exception {
-        InventoryManagerInterface imi = new InventoryManager("data");
+        Dealer d = new Dealer();
+        d.setId(id);
+        InventoryManagerInterface imi = new InventoryManager(d);
         Inventory inventory = imi.getInventoryByDealerId(id);
         return inventory;
     }
@@ -89,6 +94,7 @@ public class InventoryManagementScreen extends JFrame {
         dealerItem = new JComboBox(generateDealerInformation());
 
         ve = new Vehicles();
+        backup = new Vehicles();
         dm = new dealerModel(ve);
         inventoryData = new JTable(dm);
         inventoryData.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -96,17 +102,39 @@ public class InventoryManagementScreen extends JFrame {
         setHorizontal(inventoryData);
         inventoryPane = new JScrollPane(inventoryData);
 
+        dealerCategory = new JLabel("Category:");
+        dealerYear = new JLabel("Year:");
+        dealerMake = new JLabel("Make:");
+        dealerModel = new JLabel("Model:");
+        dealerBodytype = new JLabel("BodyType:");
+
+        dealerCategorys = new JComboBox<Category>(Category.values());
+        dealerCategorys.insertItemAt("", 0);
+        dealerCategorys.setSelectedItem("");
+        dealerYears = new JComboBox();
+        dealerMakes = new JComboBox();
+        dealerModels = new JComboBox();
+        dealerBodytypes = new JComboBox();
+
         selectDealer = new JButton("Confirm");
+        filterButton = new JButton("Filter");
+        filterButton.setEnabled(false);
+        searchVehicle = new JButton("Search");
         addButton = new JButton("Add");
+        addButton.setEnabled(false);
         deleteButton = new JButton("Delete");
+        deleteButton.setEnabled(false);
         updateButton = new JButton("Update");
+        updateButton.setEnabled(false);
         selectAllButton = new JButton("Select All");
         clearAllButton = new JButton("Clear All");
         deleteConfirmButton = new JButton("Confirm");
         cancelButton = new JButton("Cancel");
+        cancel2Button = new JButton("Cancel");
 
         topPanel = new JPanel();
         midPanel = new JPanel();
+        leftPanel = new JPanel();
         rightPanel = new JPanel();
         bottomPanel = new JPanel();
     }
@@ -117,6 +145,19 @@ public class InventoryManagementScreen extends JFrame {
         topPanel.add(dealerItem);
         topPanel.add(selectDealer);
         midPanel.add(inventoryPane);
+        leftPanel.add(dealerCategory);
+        leftPanel.add(dealerCategorys);
+        leftPanel.add(dealerYear);
+        leftPanel.add(dealerYears);
+        leftPanel.add(dealerMake);
+        leftPanel.add(dealerMakes);
+        leftPanel.add(dealerModel);
+        leftPanel.add(dealerModels);
+        leftPanel.add(dealerBodytype);
+        leftPanel.add(dealerBodytypes);
+        leftPanel.add(searchVehicle);
+        leftPanel.add(cancel2Button);
+        rightPanel.add(filterButton);
         rightPanel.add(addButton);
         rightPanel.add(deleteButton);
         rightPanel.add(updateButton);
@@ -140,11 +181,13 @@ public class InventoryManagementScreen extends JFrame {
         con.add("Center", midPanel);
         con.add("East", rightPanel);
         con.add("South", bottomPanel);
-        //bottomPanel.setVisible(false);
+        con.add("West", leftPanel);
 
         topPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
         midPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 20, 50));
         rightPanel.setLayout(new GridLayout(20, 1));
+        leftPanel.setLayout(new GridLayout(15, 2));
+        leftPanel.setVisible(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 50, 0));
         bottomPanel.setVisible(false);
 
@@ -181,9 +224,113 @@ public class InventoryManagementScreen extends JFrame {
                     for (Vehicle v : getVehicle(getDealerID).getVehicles()) {
                         ve.addData(v);
                     }
+                    ve.sort();
+                    filterButton.setEnabled(true);
+                    addButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+                    updateButton.setEnabled(true);
                     repaint();
                 } catch (Exception unknowne) {
                 }
+            }
+        });
+
+        filterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                leftPanel.setVisible(true);
+                filterButton.setEnabled(false);
+                updateComboBox();
+            }
+        });
+
+        searchVehicle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (!backup.isEmpty()) {
+                    ve.addDatas(backup);
+                    backup.removeAll();
+                }
+                Category selectCategory = Category.NEW;
+                Boolean cat = true;
+                if (dealerCategorys.getSelectedItem().equals("")) {
+                    cat = false;
+                } else {
+                    selectCategory = (Category) dealerCategorys.getSelectedItem();
+                }
+                String selectYear = (String) dealerYears.getSelectedItem();
+                String selectMake = (String) dealerMakes.getSelectedItem();
+                String selectModel = (String) dealerModels.getSelectedItem();
+                String selectBodytype = (String) dealerBodytypes.getSelectedItem();
+
+                int i = 0;
+                if (cat) {
+                    while (i < ve.getRows()) {
+                        if (ve.showData(i).getCategory().equals(selectCategory)) {
+                            i++;
+                        } else {
+                            backup.addData(ve.showData(i));
+                            ve.removeData(i);
+                        }
+                    }
+                }
+                i = 0;
+                if (!selectYear.equals("")) {
+                    while (i < ve.getRows()) {
+                        if (ve.showData(i).getYear() == Integer.parseInt(selectYear)) {
+                            i++;
+                        } else {
+                            backup.addData(ve.showData(i));
+                            ve.removeData(i);
+                        }
+                    }
+                }
+                i = 0;
+                if (!selectMake.equals("")) {
+                    while (i < ve.getRows()) {
+                        if (ve.showData(i).getMake().equals(selectMake)) {
+                            i++;
+                        } else {
+                            backup.addData(ve.showData(i));
+                            ve.removeData(i);
+                        }
+                    }
+                }
+                i = 0;
+                if (!selectModel.equals("")) {
+                    while (i < ve.getRows()) {
+                        if (ve.showData(i).getModel().equals(selectModel)) {
+                            i++;
+                        } else {
+                            backup.addData(ve.showData(i));
+                            ve.removeData(i);
+                        }
+                    }
+                }
+                i = 0;
+                if (!selectBodytype.equals("")) {
+                    while (i < ve.getRows()) {
+                        if (ve.showData(i).getBodyType().equals(selectBodytype)) {
+                            i++;
+                        } else {
+                            backup.addData(ve.showData(i));
+                            ve.removeData(i);
+                        }
+                    }
+                }
+                ve.sort();
+                updateComboBox();
+                repaint();
+
+            }
+        });
+
+        cancel2Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filterButton.setEnabled(true);
+                leftPanel.setVisible(false);
             }
         });
 
@@ -222,9 +369,9 @@ public class InventoryManagementScreen extends JFrame {
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
+                try {
                     saveData();
-                }catch (Exception e1){
+                } catch (Exception e1) {
 
                 }
             }
@@ -256,6 +403,7 @@ public class InventoryManagementScreen extends JFrame {
                 dm.setHeader();
                 bottomPanel.setVisible(false);
                 inventoryData.removeMouseListener(ml);
+                ve.sort();
                 repaint();
             }
         });
@@ -274,7 +422,26 @@ public class InventoryManagementScreen extends JFrame {
         });
     }
 
-    public void setHorizontal(JTable table){
+    public void updateComboBox() {
+        dealerYears.removeAllItems();
+        dealerMakes.removeAllItems();
+        dealerModels.removeAllItems();
+        dealerBodytypes.removeAllItems();
+        for (int i = 0; i < filterInformationYear().length; i++) {
+            dealerYears.addItem(filterInformationYear()[i]);
+        }
+        for (int i = 0; i < filterInformationMake().length; i++) {
+            dealerMakes.addItem(filterInformationMake()[i]);
+        }
+        for (int i = 0; i < filterInformationModel().length; i++) {
+            dealerModels.addItem(filterInformationModel()[i]);
+        }
+        for (int i = 0; i < filterInformationBodyType().length; i++) {
+            dealerBodytypes.addItem(filterInformationBodyType()[i]);
+        }
+    }
+
+    public void setHorizontal(JTable table) {
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
 
@@ -284,14 +451,17 @@ public class InventoryManagementScreen extends JFrame {
         table.getTableHeader().setDefaultRenderer(hr);
     }
 
-    public void saveData() throws Exception{
-        InventoryManager im = new InventoryManager("data");
+    public void saveData() throws Exception {
+        Dealer d = new Dealer();
+        String getDealerID = "";
+        getDealerID += "gmps-" + dealerItem.getSelectedItem();
+        d.setId(getDealerID);
+
+        InventoryManager im = new InventoryManager(d);
         Inventory inventory = new Inventory();
 
         inventory.setVehicles(ve.updateVehicle());
-        String getDealerID = "";
-        getDealerID += "gmps-" + dealerItem.getSelectedItem();
-        inventory.setDealerId(getDealerID);
+
         im.updateInventoryToFile(inventory);
     }
 
@@ -321,6 +491,24 @@ public class InventoryManagementScreen extends JFrame {
         Vector<Object[]> comboData = new Vector<>();
 
         Vehicles() {
+        }
+
+        public void sort() {
+            List<Vehicle> l = new ArrayList<>();
+
+            for (Object[] o : comboData) {
+                l.add((Vehicle) o[1]);
+            }
+
+            SortInventory si = new SortInventory();
+            si.sortVehiclesByCategory(l);
+
+            comboData.removeAllElements();
+            for (Vehicle v : l) {
+                Object[] temp = {false, v};
+                comboData.add(temp);
+            }
+
         }
 
         public void addData(Vehicle vehicle) {
@@ -396,12 +584,22 @@ public class InventoryManagementScreen extends JFrame {
             }
         }
 
-        public ArrayList<Vehicle> updateVehicle(){
+        public boolean isEmpty() {
+            return comboData.isEmpty();
+        }
+
+        public void addDatas(Vehicles v) {
+            for (Object[] o : v.comboData) {
+                addData((Vehicle) o[1]);
+            }
+        }
+
+        public ArrayList<Vehicle> updateVehicle() {
             Inventory inventory = new Inventory();
             ArrayList<Vehicle> a = new ArrayList<>();
 
-            for (Object[] o:comboData){
-                a.add((Vehicle)o[1]);
+            for (Object[] o : comboData) {
+                a.add((Vehicle) o[1]);
             }
 
             return a;
@@ -500,6 +698,86 @@ public class InventoryManagementScreen extends JFrame {
                 inventoryData.getColumnModel().getColumn(6).setHeaderValue("Price");
             }
         }
+    }
+
+    public String[] filterInformationYear() {
+        ArrayList<Integer> info = new ArrayList<>();
+
+        for (int i = 0; i < ve.getRows(); i++) {
+            if (ve.showData(i).getYear() != null) {
+                if (!info.contains(ve.showData(i).getYear())) {
+                    info.add(ve.showData(i).getYear());
+                }
+            }
+        }
+        Collections.sort(info);
+        String[] finalInfo = new String[info.size()];
+        finalInfo[0] = "";
+        for (int i = 1; i < info.size(); i++) {
+            finalInfo[i] = String.valueOf(info.get(i - 1));
+        }
+
+        return finalInfo;
+    }
+
+    public String[] filterInformationMake() {
+        ArrayList<String> info = new ArrayList<>();
+
+        for (int i = 0; i < ve.getRows(); i++) {
+            if (ve.showData(i).getMake() != null) {
+                if (!info.contains(ve.showData(i).getMake())) {
+                    info.add(ve.showData(i).getMake());
+                }
+            }
+        }
+        Collections.sort(info);
+        String[] finalInfo = new String[info.size()];
+        finalInfo[0] = "";
+        for (int i = 1; i < info.size(); i++) {
+            finalInfo[i] = info.get(i - 1);
+        }
+
+        return finalInfo;
+    }
+
+    public String[] filterInformationModel() {
+        ArrayList<String> info = new ArrayList<>();
+
+        for (int i = 0; i < ve.getRows(); i++) {
+            if (ve.showData(i).getModel() != null) {
+                if (!info.contains(ve.showData(i).getModel())) {
+                    info.add(ve.showData(i).getModel());
+                }
+            }
+        }
+        Collections.sort(info);
+        String[] finalInfo = new String[info.size()];
+        finalInfo[0] = "";
+        for (int i = 1; i < info.size(); i++) {
+            finalInfo[i] = info.get(i - 1);
+        }
+
+        return finalInfo;
+    }
+
+    public String[] filterInformationBodyType() {
+        ArrayList<String> info = new ArrayList<>();
+
+        for (int i = 0; i < ve.getRows(); i++) {
+            if (ve.showData(i).getBodyType() != null) {
+                if (!info.contains(ve.showData(i).getBodyType())) {
+                    info.add(ve.showData(i).getBodyType());
+                }
+            }
+        }
+        Collections.sort(info);
+        String[] finalInfo = new String[info.size()];
+        finalInfo[0] = "";
+        for (int i = 1; i < info.size(); i++) {
+            finalInfo[i] = info.get(i - 1);
+        }
+
+        return finalInfo;
     }
 
     public static void main(String[] args) {
