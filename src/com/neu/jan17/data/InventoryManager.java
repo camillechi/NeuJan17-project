@@ -122,7 +122,7 @@ public class InventoryManager implements InventoryManagerInterface {
 
         String vehicleDetails = "id~webId~category~year~make~model~trim~type~price\n";
         StringBuilder stringBuilder = new StringBuilder();
-        for (Vehicle vehicle : inventoryMap.get(inventory.getDealerId()).getVehicles()) {
+        for (Vehicle vehicle : inventory.getVehicles()) {
             stringBuilder.append(vehicle.toString()).append("\n");
         }
         vehicleDetails = vehicleDetails+ stringBuilder.toString();
