@@ -76,7 +76,7 @@ public class InventoryManagementScreen extends JFrame {
     public void resizeColumnWidth(JTable table) {
         final TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
-            int width = 100; // Min width
+            int width = 120; // Min width
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
                 Component comp = table.prepareRenderer(renderer, row, column);
@@ -172,7 +172,7 @@ public class InventoryManagementScreen extends JFrame {
         inventoryData.setRowHeight(25);
         inventoryData.setAutoCreateRowSorter(true);
         //inventoryData.setGridColor(Color.BLUE);
-        Dimension tableSize = new Dimension(700, 600);
+        Dimension tableSize = new Dimension(800, 600);
         inventoryPane.setPreferredSize(tableSize);
 
         Container con = getContentPane();
@@ -185,9 +185,11 @@ public class InventoryManagementScreen extends JFrame {
 
         topPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
         midPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 20, 50));
-        rightPanel.setLayout(new GridLayout(20, 1));
-        leftPanel.setLayout(new GridLayout(15, 2));
+        rightPanel.setLayout(new GridLayout(10, 1, 10, 10));
+        leftPanel.setLayout(new GridLayout(12, 2, 5, 5));
         leftPanel.setVisible(false);
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 50));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 50, 0));
         bottomPanel.setVisible(false);
 
@@ -195,9 +197,33 @@ public class InventoryManagementScreen extends JFrame {
         //dealerNameLabel.setFont(f2);
         addButton.setFont(f3);
         updateButton.setFont(f3);
+        filterButton.setFont(f3);
+        deleteButton.setFont(f3);
+
+
         Dimension boxsize = new Dimension(150, 30);
         dealerItem.setPreferredSize(boxsize);
 
+        Dimension comboboxSize = new Dimension(150, 30);
+        dealerCategorys.setPreferredSize(comboboxSize);
+        dealerYears.setPreferredSize(comboboxSize);
+        dealerMakes.setPreferredSize(comboboxSize);
+        dealerModels.setPreferredSize(comboboxSize);
+        dealerBodytypes.setPreferredSize(comboboxSize);
+
+        Dimension buttonSize = new Dimension(100, 50);
+        searchVehicle.setPreferredSize(buttonSize);
+        cancel2Button.setPreferredSize(buttonSize);
+        filterButton.setPreferredSize(buttonSize);
+        addButton.setPreferredSize(buttonSize);
+        deleteButton.setPreferredSize(buttonSize);
+        updateButton.setPreferredSize(buttonSize);
+
+        Dimension buttonSizeBtm = new Dimension(100, 40);
+        selectAllButton.setPreferredSize(buttonSizeBtm);
+        clearAllButton.setPreferredSize(buttonSizeBtm);
+        deleteConfirmButton.setPreferredSize(buttonSizeBtm);
+        cancelButton.setPreferredSize(buttonSizeBtm);
     }
 
     public void addListener() {
@@ -396,10 +422,13 @@ public class InventoryManagementScreen extends JFrame {
         deleteConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int n = JOptionPane.showConfirmDialog(null, "Are you sure?", "Delete", JOptionPane.OK_CANCEL_OPTION);
+                if (n == 0) {
+                    ve.clearSelectVehicle();
+                }
                 deleteButton.setEnabled(true);
                 addButton.setEnabled(true);
                 updateButton.setEnabled(true);
-                ve.clearSelectVehicle();
                 dm.setHeader();
                 bottomPanel.setVisible(false);
                 inventoryData.removeMouseListener(ml);
@@ -452,23 +481,13 @@ public class InventoryManagementScreen extends JFrame {
     }
 
     public void saveData() throws Exception {
-        Dealer d = new Dealer();
-        String getDealerID = "";
-        getDealerID += "gmps-" + dealerItem.getSelectedItem();
-        d.setId(getDealerID);
-
-        InventoryManager im = new InventoryManager(d);
-        Inventory inventory = new Inventory();
-
-        inventory.setVehicles(ve.updateVehicle());
-
-        im.updateInventoryToFile(inventory);
+        ve.updateVehicle();
     }
 
     public void init() {
 
         setVisible(true);
-        setSize(900, 900);
+        setSize(1200, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
@@ -594,15 +613,24 @@ public class InventoryManagementScreen extends JFrame {
             }
         }
 
-        public ArrayList<Vehicle> updateVehicle() {
-            Inventory inventory = new Inventory();
-            ArrayList<Vehicle> a = new ArrayList<>();
+        public void updateVehicle() throws Exception {
 
+            ArrayList<Vehicle> a = new ArrayList<>();
+            Dealer d = new Dealer();
+            String getDealerID = "";
+            getDealerID += "gmps-" + dealerItem.getSelectedItem();
+            d.setId(getDealerID);
+            d.setLocation("En-US");
+
+            InventoryManager im = new InventoryManager(d);
             for (Object[] o : comboData) {
                 a.add((Vehicle) o[1]);
+                im.addVehicleToInventory(d, (Vehicle) o[1]);
             }
-
-            return a;
+            Inventory in = new Inventory();
+            in.setDealerId(getDealerID);
+            in.setVehicles(a);
+            im.updateInventoryToFile(in);
         }
 
     }
