@@ -17,9 +17,9 @@ class MainPage extends JFrame implements ActionListener {
         JLabel background = new JLabel(new ImageIcon(imgPathUrl.getPath()));
         add(background);
         background.setLayout(new FlowLayout());
-        JButton customerButton = new JButton("Customer");
+        JButton customerButton = new JButton("CUSTOMER");
         customerButton.setPreferredSize(new Dimension(100, 50));
-        JButton dealerButton = new JButton("Dealer");
+        JButton dealerButton = new JButton("DEALER");
         dealerButton.setPreferredSize(new Dimension(100,50));
         JTextField title = new JTextField("Vehicle Management");
         Font font1 = new Font("SansSerif", Font.BOLD, 20);
@@ -39,15 +39,15 @@ class MainPage extends JFrame implements ActionListener {
         setSize(1500, 1500);
 //        setSize(1000, 500);
         customerButton.addActionListener(this);
-        customerButton.setActionCommand("Customer");
+        customerButton.setActionCommand("CUSTOMER");
         dealerButton.addActionListener(this);
-        dealerButton.setActionCommand("Dealers");
+        dealerButton.setActionCommand("DEALER");
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Customer")) {
+        if (e.getActionCommand().equals("CUSTOMER")) {
             // redirect to Dealers Information
             DealerChooseUI dealerChooseUI = new DealerChooseUI();
             dealerChooseUI.setVisible(true);
@@ -55,7 +55,7 @@ class MainPage extends JFrame implements ActionListener {
 
 
 
-        } else if (e.getActionCommand().equals("Dealers")) {
+        } else if (e.getActionCommand().equals("DEALER")) {
             // redirect to Dealers Management Page
             // MainPage.setVisible(false);
             DealerInfoTable dealerInfoTable = new DealerInfoTable();
