@@ -10,9 +10,11 @@ import java.net.URL;
 class MainPage extends JFrame implements ActionListener {
     private JPanel MainPage = new JPanel();
     private final DealerInfoTable dealerInfoTable = new DealerInfoTable();
+    private final DealerChooseUI dealerChooseUI = new DealerChooseUI();
 
     // Initiate the Main Page
     public MainPage() {
+        dealerChooseUI.setVisible(false);
         dealerInfoTable.setVisible(false);
         setLayout(new BorderLayout());
         URL imgPathUrl = getClass().getResource("background.jpg");
@@ -50,10 +52,14 @@ class MainPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Customer")) {
             // redirect to Dealers Information
+            dispose();
+            dealerChooseUI.setVisible(true);
+
 
         } else if (e.getActionCommand().equals("Dealers")) {
             // redirect to Dealers Management Page
             // MainPage.setVisible(false);
+
             dispose();
             dealerInfoTable.setVisible(true);
         }
