@@ -56,7 +56,7 @@ public class SearchTool implements SearchFunc {
 	}
 
 	private boolean matchKeyWord(Vehicle v, String kw) {
-		return v.getMake().indexOf(kw) >= 0 || v.getModel().indexOf(kw) >= 0 || v.getBodyType().indexOf(kw) >= 0 || v.getWebId().indexOf(kw) >= 0;
+		return v.getMake().toLowerCase().indexOf(kw) >= 0 || v.getModel().toLowerCase().indexOf(kw) >= 0 || v.getBodyType().toLowerCase().indexOf(kw) >= 0;
 	}
 	
 	private boolean matchFilters(Vehicle v, List<Filter> filters) {
