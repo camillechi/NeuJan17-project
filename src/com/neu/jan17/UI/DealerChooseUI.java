@@ -15,7 +15,7 @@ public class DealerChooseUI extends JFrame {
     private JLabel headline, dealerNameLabel;
     private JComboBox dealerItem;
     private JButton selectDealer;
-    private String getDealerID;
+    public static String getDealerID = null;
     private JPanel dealerChooseUI;
 
 
@@ -36,9 +36,11 @@ public class DealerChooseUI extends JFrame {
         selectDealer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getDealerID += "gmps-" + dealerItem.getSelectedItem();
+                getDealerID = "gmps-" + dealerItem.getSelectedItem();
                 // add your code here.
                 // redirect to team two page
+
+                CustomerVehicleSearchScreen customerVehicleSearchScreen = new CustomerVehicleSearchScreen();
             }
         });
         JPanel bottomPanel = new JPanel();
@@ -50,6 +52,10 @@ public class DealerChooseUI extends JFrame {
         setVisible(true);
         setSize(200, 400);
 
+    }
+
+    public String getDealerID(){
+        return getDealerID;
     }
 
     public static void main(String[] args) {
