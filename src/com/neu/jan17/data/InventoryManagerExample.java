@@ -42,6 +42,6 @@ public class InventoryManagerExample {
         }
 
         // Save changes to an inventory to its file
-        inventoryManager.updateInventoryToFile(inventory);
+        inventoryManager.updateInventoryToFile(dealer);
     }
 }

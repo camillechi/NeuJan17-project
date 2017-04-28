@@ -42,15 +42,5 @@ public class VehicleDetailsController {
         view.setDealerURLLabel("URL : "+dealer.getUrl());
 
     }
-    /*
-    public static void main(String[] args) {
-        Vehicle v = new Vehicle();
-        v.setAllDetails("2228104413","gmps-aj-dohmann", Category.NEW,2014,
-                "Cadillac","CTS Sedan","3.6L V6 AWD Luxury","CAR",
-                57620.0f,"http://inventory-dmg.assets-cdk.com/5/1/7/13411480715x90.jpg");
-
-        new VehicleDetailsController(v);
-    }
-    */
 
 }
