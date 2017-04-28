@@ -133,7 +133,7 @@ public class CustomerVehicleSearchScreen extends CustomerVehicleSearchScreenData
 
 
         try {
-            searchTool = new SearchTool(dealer);
+            searchTool = new SearchTool(dealer.getId());
             InventoryManager inventoryManager = new InventoryManager(dealer);
             inventory= inventoryManager.getInventoryByDealerId(dealer.getId());
             sortInventory = new SortInventory();
